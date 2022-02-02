@@ -6,6 +6,7 @@ import {
   LayoutAnimation,
   Alert as AlertRN,
 } from 'react-native';
+
 import { cloneElement, isValidElement } from 'react';
 
 export enum _STATUS_CODE {
