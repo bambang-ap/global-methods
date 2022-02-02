@@ -1,0 +1,32 @@
+{
+    "name": "global-methods",
+    "version": "1.0.0",
+    "keywords": [
+        "global-methods",
+        "globalThis",
+        "javascript",
+        "typescript"
+    ],
+    "author": "aprakoso98",
+    "description": "Primitive methods for javascript",
+    "license": "MIT",
+    "contributors": [
+        {
+            "name": "Bambang Adhitya",
+            "url": "https://github.com/aprakoso98",
+            "githubUsername": "aprakoso98"
+        }
+    ],
+    "main": "index.ts",
+    "types": "index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/aprakoso98/Typed.git",
+        "directory": "global-methods"
+    },
+    "scripts": {},
+    "peerDependencies": {
+        "react": "*",
+        "react-native": "*"
+    }
+}
