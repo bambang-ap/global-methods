@@ -1,10 +1,4 @@
-import { cloneElement, isValidElement } from 'react';
-import {
-  Platform,
-  UIManager,
-  LayoutAnimation,
-  AlertButton as AlertButtonRN,
-} from 'react-native';
+import { AlertButton as AlertButtonRN } from 'react-native';
 
 import { _STATUS_CODE } from './index';
 
@@ -82,13 +76,7 @@ declare global {
   };
   interface Array<T> {
     toRnStyle: () => T[];
-    kMap(
-      callback: (
-        data: T,
-        key: number,
-        isLast: boolean,
-      ) => undefined | null | false | JSX.Element | JSX.Element[],
-    ): JSX.Element[];
+    kMap<U>(callback: (value: { item: T, index: number, i: number, isFirst: boolean, isLast: boolean }) => U): U[];
   }
 
   interface Number {
@@ -122,9 +110,13 @@ declare global {
     randomInt: (min: number, max: number) => number;
   }
 
+  interface Object {
+    toQueryParams(obj: Record<string, unknown>): string
+  }
+
   function noop(): null;
   function noopVoid(): void;
-  function animate(): void;
+  function animate(): Promise<void>;
   function Alert(
     ...params: [
       message: string,

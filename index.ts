@@ -1,14 +1,5 @@
 /// <reference path="index.d.ts" />
 
-import {
-  Platform,
-  UIManager,
-  LayoutAnimation,
-  Alert as AlertRN,
-} from 'react-native';
-
-import { cloneElement, isValidElement } from 'react';
-
 export enum _STATUS_CODE {
   SUCCESS = 200,
   NOT_FOUND = 404,
@@ -43,11 +34,14 @@ globalThis.FontMap = props => {
   return (fonts && dFont ? fonts[dFont] || dFont : dFont) as string;
 };
 
-globalThis.animate = () => {
-  if (Platform.OS === 'android') {
-    UIManager.setLayoutAnimationEnabledExperimental(true);
-  }
-  LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+globalThis.animate = async () => {
+  try {
+    const { Platform, UIManager, LayoutAnimation } = await import('react-native')
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+  } catch (err) { }
 };
 
 globalThis.ColorMap = props => {
@@ -78,38 +72,36 @@ globalThis.noop = function () {
 
 globalThis.noopVoid = function () { };
 
-globalThis.Alert = function (message, optionsOrTitle = 'Alert') {
-  if (typeof optionsOrTitle === 'string') {
-    AlertRN.alert(optionsOrTitle, message);
-  } else {
-    const {
-      buttons = [['Ok']],
-      title = 'Alert',
-      cancelable,
-      onDismiss,
-    } = optionsOrTitle;
-    AlertRN.alert(
-      title,
-      message,
-      buttons.map(btn => {
-        const [text, onPress, style] = btn || [];
-        return { onPress, style, text };
-      }),
-      { cancelable, onDismiss },
-    );
-  }
+globalThis.Alert = async function (message, optionsOrTitle = 'Alert') {
+  try {
+    const { Alert: AlertRN } = await import('react-native')
+    if (typeof optionsOrTitle === 'string') {
+      AlertRN.alert(optionsOrTitle, message);
+    } else {
+      const {
+        buttons = [['Ok']],
+        title = 'Alert',
+        cancelable,
+        onDismiss,
+      } = optionsOrTitle;
+      AlertRN.alert(
+        title,
+        message,
+        buttons.map(btn => {
+          const [text, onPress, style] = btn || [];
+          return { onPress, style, text };
+        }),
+        { cancelable, onDismiss },
+      );
+    }
+  } catch (err) { }
 };
 
 Array.prototype.kMap = function (callback) {
-  const arr = this;
-  return arr.map(function (data, index) {
-    const isLast = index + 1 === arr.length;
-    let cb = callback(data, index, isLast);
-    if (isValidElement(cb)) {
-      cb = cloneElement(cb, { key: index.toString() });
-    }
-    return cb as JSX.Element;
-  });
+  const arr = this as unknown[]
+  return arr.map((item, index) => {
+    return callback({ item, index, i: index, isFirst: index === 0, isLast: index + 1 === arr.length })
+  })
 };
 
 Array.prototype.toRnStyle = function () {
@@ -298,5 +290,11 @@ Math.randomInt = function (min, max) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
+
+Object.toQueryParams = function (obj) {
+  const ret = []
+  for (const key in obj) ret.push(`${key}=${obj[key]}`)
+  return ret.join('&')
+}
 
 export { };
