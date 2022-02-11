@@ -76,7 +76,7 @@ declare global {
   };
   interface Array<T> {
     toRnStyle: () => T[];
-    kMap<U>(callback: (value: { item: T, index: number, i: number, isFirst: boolean, isLast: boolean }) => U): U[];
+    mmap<U>(callback: (value: { item: T, index: number, i: number, isFirst: boolean, isLast: boolean }) => U): U[];
   }
 
   interface Number {

@@ -97,7 +97,7 @@ globalThis.Alert = async function (message, optionsOrTitle = 'Alert') {
   } catch (err) { }
 };
 
-Array.prototype.kMap = function (callback) {
+Array.prototype.mmap = function (callback) {
   const arr = this as unknown[]
   return arr.map((item, index) => {
     return callback({ item, index, i: index, isFirst: index === 0, isLast: index + 1 === arr.length })
