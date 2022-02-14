@@ -76,7 +76,7 @@ declare global {
   };
   interface Array<T> {
     toRnStyle: () => T[];
-    mmap<U>(callback: (value: { item: T, index: number, i: number, isFirst: boolean, isLast: boolean }) => U): U[];
+    mmap<U>(callback: (value: { item: T, isFirst: boolean, isLast: boolean }, index: number) => U): U[];
   }
 
   interface Number {
@@ -98,11 +98,11 @@ declare global {
     snakeToCamel(): string;
     camelToSnake(): string;
     camelToKebab(): string;
-    uuid(): string;
     ucfirst(): string;
     lcfirst(): string;
     ucwords(): string;
     trimSpaces(): string;
+		isBase64File(): boolean
     removeSpecialChar(): string;
   }
 
@@ -135,4 +135,5 @@ declare global {
   function ColorMap<C extends MyObject>(props: ColorProps<C>): string;
   function SizeMap<S extends MyObject<number>>(props: SizeProps<S>): number;
   function prettyConsole(...args: any[]): void;
+  function uuid(): string
 }

@@ -17,6 +17,13 @@ globalThis.prettyConsole = (...objects) => {
   );
 };
 
+globalThis.uuid = () => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & (0x3 | 0x8))
+    return v.toString(16)
+  })
+}
+
 globalThis.BGMap = props => {
   const { backgroundColors, backgroundColor: dColor } = props;
   return (
@@ -100,7 +107,7 @@ globalThis.Alert = async function (message, optionsOrTitle = 'Alert') {
 Array.prototype.mmap = function (callback) {
   const arr = this as unknown[]
   return arr.map((item, index) => {
-    return callback({ item, index, i: index, isFirst: index === 0, isLast: index + 1 === arr.length })
+    return callback({ item, isFirst: index === 0, isLast: index + 1 === arr.length }, index)
   })
 };
 
@@ -255,14 +262,6 @@ String.prototype.camelToKebab = function () {
   return kebabCase;
 };
 
-String.prototype.uuid = function () {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    var r = (Math.random() * 16) | 0,
-      v = c === 'x' ? r : r & (0x3 | 0x8);
-    return v.toString(16);
-  });
-};
-
 String.prototype.ucfirst = function () {
   return this.charAt(0).toUpperCase() + this.slice(1);
 };
@@ -284,6 +283,15 @@ String.prototype.trimSpaces = function () {
 String.prototype.removeSpecialChar = function () {
   return this.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
 };
+
+String.prototype.isBase64File = function () {
+	try {
+		const regex = /^\s*data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i
+		return !!this.match(regex);
+	} catch (error) {
+		return false
+	}
+}
 
 Math.randomInt = function (min, max) {
   min = Math.ceil(min);
