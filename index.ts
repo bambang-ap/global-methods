@@ -312,8 +312,9 @@ String.prototype.validURL = function () {
 }
 
 String.prototype.getQueryParams = function () {
-  let query = this as string
-  query = query.substring(query.indexOf('?') + 1);
+  const url = this as string
+  const query = url.substring(url.indexOf('?') + 1);
+  if(query.includes(url))return {}
   const re = /([^&=]+)=?([^&]*)/g;
   const decodeRE = /\+/g;
   const decode = (str: string) => {
