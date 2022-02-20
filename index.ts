@@ -285,12 +285,75 @@ String.prototype.removeSpecialChar = function () {
 };
 
 String.prototype.isBase64File = function () {
-	try {
-		const regex = /^\s*data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i
-		return !!this.match(regex);
-	} catch (error) {
-		return false
-	}
+  try {
+    const regex = /^\s*data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i
+    return !!this.match(regex);
+  } catch (error) {
+    return false
+  }
+}
+
+String.prototype.getRawUrl = function () {
+  const url = this as string
+  if (!url.validURL()) return false
+  const str = decodeURI(url)
+  return str.split("?")[0]
+}
+
+String.prototype.validURL = function () {
+  const str = this as string
+  const pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+    '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+  return !!pattern.test(str);
+}
+
+String.prototype.getQueryParams = function () {
+  let query = this as string
+  query = query.substring(query.indexOf('?') + 1);
+  const re = /([^&=]+)=?([^&]*)/g;
+  const decodeRE = /\+/g;
+  const decode = (str: string) => {
+    return decodeURIComponent(str.replace(decodeRE, " "));
+  };
+  let e;
+  const params: MyObject<any> = {}
+  while (e = re.exec(query)) {
+    let k = decode(e[1])
+    const v = decode(e[2]);
+    if (k.substring(k.length - 2) === '[]') {
+      k = k.substring(0, k.length - 2);
+      (params[k] || (params[k] = [])).push(v);
+    } else params[k] = v;
+  }
+
+  const assign = function (obj: MyObject<any>, keyPath: string, value: string) {
+    const lastKeyIndex = keyPath.length - 1;
+    for (let i = 0; i < lastKeyIndex; ++i) {
+      const key = keyPath[i];
+      if (!(key in obj))
+        obj[key] = {}
+      obj = obj[key];
+    }
+    obj[keyPath[lastKeyIndex]] = value;
+  }
+
+  for (const prop in params) {
+    const structure = prop.split('[');
+    if (structure.length > 1) {
+      const levels: any = [];
+      structure.forEach(function (item) {
+        const key = item.replace(/[?[\]\\ ]/g, '');
+        levels.push(key);
+      });
+      assign(params, levels, params[prop]);
+      delete (params[prop]);
+    }
+  }
+  return params;
 }
 
 Math.randomInt = function (min, max) {

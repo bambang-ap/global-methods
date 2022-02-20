@@ -102,8 +102,11 @@ declare global {
     lcfirst(): string;
     ucwords(): string;
     trimSpaces(): string;
-		isBase64File(): boolean
+    isBase64File(): boolean
     removeSpecialChar(): string;
+    validURL(): boolean
+    getRawUrl(): string | false
+    getQueryParams(): Record<string, string>
   }
 
   interface Math {
