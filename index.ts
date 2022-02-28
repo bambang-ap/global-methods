@@ -43,6 +43,7 @@ globalThis.FontMap = props => {
 
 globalThis.animate = async () => {
   try {
+    // @ts-ignore
     const { Platform, UIManager, LayoutAnimation } = await import('react-native')
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -81,6 +82,7 @@ globalThis.noopVoid = function () { };
 
 globalThis.Alert = async function (message, optionsOrTitle = 'Alert') {
   try {
+    // @ts-ignore
     const { Alert: AlertRN } = await import('react-native')
     if (typeof optionsOrTitle === 'string') {
       AlertRN.alert(optionsOrTitle, message);
@@ -314,19 +316,20 @@ String.prototype.validURL = function () {
 String.prototype.getQueryParams = function () {
   const url = this as string
   const query = url.substring(url.indexOf('?') + 1);
-  if(query.includes(url))return {}
+  if (query.includes(url)) return {}
   const re = /([^&=]+)=?([^&]*)/g;
   const decodeRE = /\+/g;
   const decode = (str: string) => {
     return decodeURIComponent(str.replace(decodeRE, " "));
   };
-  let e;
-  const params: MyObject<any> = {}
+  let e: RegExpExecArray;
+  const params: MyObject = {}
   while (e = re.exec(query)) {
     let k = decode(e[1])
     const v = decode(e[2]);
     if (k.substring(k.length - 2) === '[]') {
       k = k.substring(0, k.length - 2);
+      // @ts-ignore
       (params[k] || (params[k] = [])).push(v);
     } else params[k] = v;
   }
@@ -335,8 +338,8 @@ String.prototype.getQueryParams = function () {
     const lastKeyIndex = keyPath.length - 1;
     for (let i = 0; i < lastKeyIndex; ++i) {
       const key = keyPath[i];
-      if (!(key in obj))
-        obj[key] = {}
+      if (!(key in obj)) // @ts-ignore
+        obj[key] = {} // @ts-ignore
       obj = obj[key];
     }
     obj[keyPath[lastKeyIndex]] = value;
