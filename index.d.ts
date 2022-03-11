@@ -20,6 +20,7 @@ declare global {
 
   type Noop = typeof noop;
   type NoopVoid = typeof noopVoid;
+  type Awaited<T> = T extends PromiseLike<infer U> ? U : T
   type Tuple<T, N extends number = 1> = N extends N
     ? number extends N
     ? T[]
