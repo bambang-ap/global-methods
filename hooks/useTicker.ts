@@ -1,3 +1,4 @@
+import '../'
 import {useEffect, useState} from 'react';
 
 type UseTickerRet = [
