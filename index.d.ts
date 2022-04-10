@@ -135,5 +135,6 @@ declare global {
   function ColorMap<C extends MyObject>(props: ColorProps<C>): string;
   function SizeMap<S extends MyObject<number>>(props: SizeProps<S>): number;
   function prettyConsole(...args: any[]): void;
+  function prettyJSON(object: object): string;
   function uuid(): string
 }

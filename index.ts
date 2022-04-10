@@ -1,11 +1,15 @@
 /// <reference path="index.d.ts" />
 
 globalThis.prettyConsole = (...objects) => {
-  objects.map((d) =>
-    typeof d === "object"
-      ? console.log(JSON.stringify(d, null, 4))
-      : console.log(d)
+  objects.map((message) =>
+    typeof message === "object"
+      ? console.log(prettyConsole(message))
+      : console.log(message)
   );
+};
+
+globalThis.prettyJSON = (object) => {
+  return JSON.stringify(object, null, 4);
 };
 
 globalThis.uuid = () => {
