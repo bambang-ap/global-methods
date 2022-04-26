@@ -1,9 +1,9 @@
 /// <reference path="index.d.ts" />
 
 globalThis.prettyConsole = (...objects) => {
-  objects.map((message) =>
+  return objects.forEach((message) =>
     typeof message === "object"
-      ? console.log(prettyConsole(message))
+      ? console.log(prettyJSON(message))
       : console.log(message)
   );
 };

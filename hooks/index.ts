@@ -1,4 +1,3 @@
-import '../'
 import {Dispatch, useEffect, useRef, useState} from 'react';
 
 export * from './useTicker'
