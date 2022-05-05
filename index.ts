@@ -372,10 +372,17 @@ Math.randomInt = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-Object.toQueryParams = function (obj) {
+Object.toQueryParams = function(obj) {
   const ret = [];
-  for (const key in obj) ret.push(`${key}=${obj[key]}`);
-  return ret.join("&");
+  for (const key in obj) {
+    const val = obj[key];
+    if (val !== undefined) {
+      if (Array.isArray(val)) {
+        val.forEach((v, i) => ret.push(`${key}[${i}]=${v}`));
+      } else ret.push(`${key}=${val}`);
+    }
+  }
+  return ret.join('&');
 };
 
 export {};
