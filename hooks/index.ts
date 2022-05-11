@@ -1,18 +1,18 @@
-import {Dispatch, useEffect, useRef, useState} from 'react';
+import { Dispatch, useEffect, useRef, useState } from "react";
 
-export * from './useTicker'
+export * from "./useTicker";
 
 type UseToggleRet = [
   boolean,
-  (callback: boolean | ((state: boolean) => boolean)) => void,
+  (callback: boolean | ((state: boolean) => boolean)) => void
 ];
 
 export const useToggle = (initState: boolean = false): UseToggleRet => {
   const [toggle, setToggle] = useState(initState);
   return [
     toggle,
-    callback => {
-      if (typeof callback === 'function') {
+    (callback) => {
+      if (typeof callback === "function") {
         const newState = callback(toggle);
         setToggle(newState);
       } else {
@@ -23,7 +23,7 @@ export const useToggle = (initState: boolean = false): UseToggleRet => {
 };
 
 export const useStateObject = <S extends MyObject<unknown>>(
-  initState: S,
+  initState: S
 ): [state: S, dispatch: (newState: Partial<S>) => void] => {
   const keys = Object.keys(initState);
   let states = keys.reduce((ret, k) => {
@@ -40,7 +40,7 @@ export const useStateObject = <S extends MyObject<unknown>>(
   }, {} as MyObject<Dispatch<unknown>>);
   const setters = (newState: Partial<S>) => {
     const keys = Object.keys(newState);
-    keys.forEach(k => {
+    keys.forEach((k) => {
       const value = newState[k];
       const dispathcer = dispatch[k];
       if (![value, dispathcer].includes(undefined)) dispatch[k](value);
@@ -50,7 +50,7 @@ export const useStateObject = <S extends MyObject<unknown>>(
 };
 
 export const useStateArray = <S>(
-  initState: S[] = [] as S[],
+  initState: S[] = [] as S[]
 ): [
   S[],
   /**
@@ -65,7 +65,7 @@ export const useStateArray = <S>(
    * Init or replace your current state with the new one
    * @overrideValue The value to replace all
    */
-  (overrideValue: S[]) => void,
+  (overrideValue: S[]) => void
 ] => {
   const [state, setState] = useState(initState || []);
   return [
@@ -75,7 +75,7 @@ export const useStateArray = <S>(
       if (Array.isArray(valueOrIndex)) {
         newState = [...newState, ...valueOrIndex];
       } else {
-        if (typeof indexOrPush === 'number') {
+        if (typeof indexOrPush === "number") {
           newState[indexOrPush] = valueOrIndex;
         } else {
           newState.push(valueOrIndex);
@@ -83,7 +83,7 @@ export const useStateArray = <S>(
       }
       setState(newState);
     },
-    override => setState(override),
+    (override) => setState(override),
   ];
 };
 
@@ -94,38 +94,31 @@ type UseArrayRet<T> = [
     remove: (index: number) => void;
     replace: (index: number, data: T) => void;
     initialize: (newData: T[]) => void;
-  },
+  }
 ];
 
 export const useArray = <T>(initialState: T[] = []): UseArrayRet<T> => {
   type Manager = UseArrayRet<T>[1];
-  const [state, setState] = useState(initialState);
+  const [state, setState] = useState<T[]>(initialState);
 
-  const initialize: Manager['initialize'] = newData => {
+  const initialize: Manager["initialize"] = (newData) => {
     setState(newData);
   };
 
-  const push: Manager['push'] = data => {
+  const push: Manager["push"] = (data) => {
     if (Array.isArray(data)) setState([...state, ...data]);
     else setState([...state, data]);
   };
 
-  const replace: Manager['replace'] = (index, data) => {
-    const dataL = state.slice(0, index);
-    const dataR = state.slice(index + 1);
-    if (index >= 0 && index < state?.length) {
-      setState([...dataL, data, ...dataR]);
-    }
+  const replace: Manager["replace"] = (index, data) => {
+    setState(state.replace(index, data));
   };
 
-  const remove: Manager['remove'] = index => {
-    const dataL = state.slice(0, index);
-    const dataR = state.slice(index + 1);
-    if (index > 0) setState([...dataL, ...dataR]);
-    else setState(dataR);
+  const remove: Manager["remove"] = (index) => {
+    setState(state.remove(index));
   };
 
-  return [state, {replace, push, remove, initialize}];
+  return [state, { replace, push, remove, initialize }];
 };
 
 export const useInterval = (callback: () => void, delay: number | null) => {

@@ -104,6 +104,22 @@ globalThis.Alert = async function (message, optionsOrTitle = "Alert") {
   } catch (err) {}
 };
 
+Array.prototype.replace = function (index, data) {
+  const state = this;
+  const dataL = state.slice(0, index);
+  const dataR = state.slice(index + 1);
+  if (index >= 0 && index < state?.length) return [...dataL, data, ...dataR];
+  return state;
+};
+
+Array.prototype.remove = function (index) {
+  const state = this;
+  const dataL = state.slice(0, index);
+  const dataR = state.slice(index + 1);
+  if (index > 0) return [...dataL, ...dataR];
+  else return dataR;
+};
+
 Array.prototype.mmap = function (callback) {
   const arr = this as unknown[];
   return arr.map((item, index) => {
@@ -372,7 +388,7 @@ Math.randomInt = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-Object.toQueryParams = function(obj) {
+Object.toQueryParams = function (obj) {
   const ret = [];
   for (const key in obj) {
     const val = obj[key];
@@ -382,7 +398,7 @@ Object.toQueryParams = function(obj) {
       } else ret.push(`${key}=${val}`);
     }
   }
-  return ret.join('&');
+  return ret.join("&");
 };
 
 export {};
