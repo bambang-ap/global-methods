@@ -1,4 +1,4 @@
-import { Dispatch, useEffect, useRef, useState } from "react";
+import { Dispatch, useEffect, useRef, useState, SetStateAction } from "react";
 
 export * from "./useTicker";
 
@@ -96,6 +96,23 @@ type UseArrayRet<T> = [
     initialize: (newData: T[]) => void;
   }
 ];
+
+export const useObject = <S extends MyObject<unknown>>(
+	initState = {} as S,
+): [S, (newState: Partial<S>) => void, Dispatch<SetStateAction<S>>] => {
+	const [state, _setState] = useState<S>(initState);
+
+	const setState = (newState: Partial<S> | ((prevState: S) => Partial<S>)) => {
+		if (typeof newState === 'function') {
+			const stateNew = newState(state);
+			return _setState(prevState => ({...prevState, ...stateNew}));
+		}
+
+		return _setState(prevState => ({...prevState, ...newState}));
+	};
+
+	return [state, setState, _setState];
+};
 
 export const useArray = <T>(initialState: T[] = []): UseArrayRet<T> => {
   type Manager = UseArrayRet<T>[1];
