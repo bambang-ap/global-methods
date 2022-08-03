@@ -1,4 +1,5 @@
 import { AlertButton as AlertButtonRN } from "react-native";
+import { _STATUS_CODE } from "./index";
 
 type AlertButton = [
   text: string,
@@ -13,6 +14,8 @@ declare module "react" {
 }
 
 declare global {
+  var STATUS_CODE: typeof _STATUS_CODE;
+
   type Noop = typeof noop;
   type NoopVoid = typeof noopVoid;
   type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
