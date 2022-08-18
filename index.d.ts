@@ -74,8 +74,9 @@ declare global {
   };
   interface Array<T> {
     toRnStyle: () => T[];
+    remove: (index: number) => T[];
     replace: (index: number, data: T) => T[];
-    remove: (index: number,) => T[];
+    generateRows(numColumns: number): { data: T[][]; rows: number };
     mmap<U>(
       callback: (
         value: { item: T; isFirst: boolean; isLast: boolean },
@@ -111,7 +112,8 @@ declare global {
     removeSpecialChar(): string;
     validURL(): boolean;
     getRawUrl(): string | false;
-    getQueryParams(): Record<string, string>;
+    getQueryParams(): MyObject;
+    toStringFromQueryParams(): MyObject;
   }
 
   interface Math {
@@ -119,7 +121,7 @@ declare global {
   }
 
   interface Object {
-    toQueryParams(obj: Record<string, unknown>): string;
+    toQueryParams(obj: Record<string, string>): string;
   }
 
   function noop(): null;
