@@ -186,7 +186,7 @@ Array.prototype.remove = function (index) {
   else return dataR;
 };
 
-Array.prototype.generateRows = function (numColumns) {
+Array.prototype.generateRows = function (numColumns, sameCount = false) {
   type Ret = ReturnType<Array<unknown>["generateRows"]>;
   const array = this as [];
 
@@ -195,11 +195,15 @@ Array.prototype.generateRows = function (numColumns) {
       const n = i / numColumns;
       const isRound = n - Math.floor(n) === 0;
       if (isRound) {
-        ret.data.push([]);
+        if (sameCount) ret.data.push(Array.from({ length: numColumns }, noop));
+        else ret.data.push([]);
         ret.rows += 1;
       }
 
-      ret.data[ret.rows].push(curr);
+      if (sameCount) {
+        const index = i % numColumns;
+        ret.data[ret.rows][index] = curr;
+      } else ret.data[ret.rows].push(curr);
 
       return ret;
     },

@@ -76,7 +76,10 @@ declare global {
     toRnStyle: () => T[];
     remove: (index: number) => T[];
     replace: (index: number, data: T) => T[];
-    generateRows(numColumns: number): { data: T[][]; rows: number };
+    generateRows(
+      numColumns: number,
+      sameCount?: boolean
+    ): { data: T[][]; rows: number };
     mmap<U>(
       callback: (
         value: { item: T; isFirst: boolean; isLast: boolean },
