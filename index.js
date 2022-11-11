@@ -373,6 +373,10 @@ Math.randomInt = function (min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 Object.toQueryParams = function (obj) {
-    const params = Object.entries(obj).map(([key, value]) => `${key}=${value}`);
+    const params = Object.entries(obj).reduce((ret, [key, value]) => {
+        if (value !== undefined)
+            ret.push(`${key}=${value}`);
+        return ret;
+    });
     return params.join("&");
 };
