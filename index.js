@@ -377,6 +377,6 @@ Object.toQueryParams = function (obj) {
         if (value !== undefined)
             ret.push(`${key}=${value}`);
         return ret;
-    });
+    }, []);
     return params.join("&");
 };

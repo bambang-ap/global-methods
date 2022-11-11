@@ -419,11 +419,11 @@ Math.randomInt = function (min, max) {
 };
 
 Object.toQueryParams = function (obj) {
-  const params = Object.entries(obj).reduce((ret, [key, value]) => {
+  const params = Object.entries(obj).reduce<string[]>((ret, [key, value]) => {
     if (value !== undefined) ret.push(`${key}=${value}`);
 
     return ret;
-  });
+  }, []);
 
   return params.join("&");
 };
