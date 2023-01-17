@@ -1,10 +1,4 @@
-import { AlertButton as AlertButtonRN } from "react-native";
-
-type AlertButton = [
-  text: string,
-  onPress?: () => void,
-  style?: AlertButtonRN["style"]
-];
+export {};
 
 declare module "react" {
   function forwardRef<T, P = {}>(
@@ -41,10 +35,16 @@ declare global {
   type Create<K extends string, A, B = string> = { [Q in K as `${Q}s`]?: A } & {
     [Q in K]?: TypeProp<A, B>;
   };
-  type SizeProps<S> = Create<"size", S, number>;
-  type ColorProps<C> = Create<"color", C>;
-  type FontProps<F> = Create<"font", F>;
-  type BGProps<C> = Create<"backgroundColor", C>;
+  type NestedKeyOf<
+    ObjectType extends object,
+    Delimiter extends string = "-"
+  > = {
+    [Key in keyof ObjectType &
+      (string | number)]: ObjectType[Key] extends object
+      ? never | `${Key}${Delimiter}${NestedKeyOf<ObjectType[Key]>}`
+      : `${Key}`;
+  }[keyof ObjectType & (string | number)];
+  type LiteralUnion<T extends U, U = string> = T | (U & { property?: never });
   type ToString<R extends string, L extends string = ""> = `${L}${R}`;
   type CamelCase<
     Separator extends string,
@@ -69,6 +69,7 @@ declare global {
     sizes?: S;
     fonts?: F;
   };
+  
   interface Array<T> {
     toRnStyle: () => T[];
     remove: (index: number) => T[];
@@ -83,6 +84,11 @@ declare global {
         index: number
       ) => U
     ): U[];
+    nest<K extends keyof T>(
+      nestProperty: string,
+      nestId: K,
+      nestForeignId: K
+    ): T[];
   }
 
   interface Number {
@@ -126,24 +132,6 @@ declare global {
 
   function noop(): null;
   function noopVoid(): void;
-  function animate(): Promise<void>;
-  function Alert(
-    ...params: [
-      message: string,
-      optionsOrTitle?:
-        | string
-        | {
-            title?: string;
-            cancelable?: boolean;
-            buttons?: Partial<Tuple<AlertButton, 3>>;
-            onDismiss?: () => void;
-          }
-    ]
-  ): void;
-  function BGMap<C extends MyObject>(props: BGProps<C>): string;
-  function FontMap<F extends MyObject>(props: FontProps<F>): string;
-  function ColorMap<C extends MyObject>(props: ColorProps<C>): string;
-  function SizeMap<S extends MyObject<number>>(props: SizeProps<S>): number;
   function prettyConsole(...args: any[]): void;
   function prettyJSON(object: object): string;
   function uuid(): string;

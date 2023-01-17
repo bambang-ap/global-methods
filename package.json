@@ -1,6 +1,6 @@
 {
     "name": "global-methods",
-    "version": "1.2.1",
+    "version": "exclude.1.0.0",
     "keywords": [
         "global-methods",
         "globalThis",
@@ -29,8 +29,7 @@
         "build": "tsc --project ./tsconfig.json"
     },
     "peerDependencies": {
-        "react": "*",
-        "react-native": "*"
+        "react": "*"
     },
     "devDependencies": {
         "typescript": "^4.8.4"
