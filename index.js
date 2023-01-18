@@ -1,6 +1,5 @@
 "use strict";
 /// <reference path="../index.d.ts" />
-Object.defineProperty(exports, "__esModule", { value: true });
 globalThis.prettyConsole = (...objects) => {
     return objects.forEach((message) => typeof message === "object"
         ? console.log(prettyJSON(message))

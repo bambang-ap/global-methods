@@ -1,7 +1,5 @@
 /// <reference path="../index.d.ts" />
 
-export {};
-
 globalThis.prettyConsole = (...objects) => {
   return objects.forEach((message) =>
     typeof message === "object"
