@@ -1,5 +1,7 @@
 /// <reference path="../index.d.ts" />
 
+export {};
+
 globalThis.prettyConsole = (...objects) => {
   return objects.forEach((message) =>
     typeof message === "object"
@@ -14,62 +16,10 @@ globalThis.prettyJSON = (object) => {
 
 globalThis.uuid = () => {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
-    var r = (Math.random() * 16) | 0,
+    let r = (Math.random() * 16) | 0,
       v = c === "x" ? r : r & (0x3 | 0x8);
     return v.toString(16);
   });
-};
-
-globalThis.BGMap = (props) => {
-  const { backgroundColors, backgroundColor: dColor } = props;
-  return (
-    backgroundColors && dColor ? backgroundColors[dColor] || dColor : dColor
-  ) as string;
-};
-
-globalThis.SizeMap = (props) => {
-  const { sizes, size: dSize } = props;
-  return (sizes && dSize ? sizes[dSize as string] || dSize : dSize) as number;
-};
-
-globalThis.FontMap = (props) => {
-  const { fonts, font: dFont } = props;
-  return (fonts && dFont ? fonts[dFont] || dFont : dFont) as string;
-};
-
-globalThis.animate = async () => {
-  try {
-    const { Platform, UIManager, LayoutAnimation } = await import(
-      // @ts-ignore
-      "react-native"
-    );
-    if (Platform.OS === "android") {
-      UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-  } catch (err) {}
-};
-
-globalThis.ColorMap = (props) => {
-  const { colors, color: dColor } = props;
-  return (colors && dColor ? colors[dColor] || dColor : dColor) as string;
-};
-
-globalThis.BGMap = (props) => {
-  const { backgroundColors, backgroundColor: dColor } = props;
-  return (
-    backgroundColors && dColor ? backgroundColors[dColor] || dColor : dColor
-  ) as string;
-};
-
-globalThis.SizeMap = (props) => {
-  const { sizes, size: dSize } = props;
-  return (sizes && dSize ? sizes[dSize as string] || dSize : dSize) as number;
-};
-
-globalThis.FontMap = (props) => {
-  const { fonts, font: dFont } = props;
-  return (fonts && dFont ? fonts[dFont] || dFont : dFont) as string;
 };
 
 globalThis.noop = function () {
@@ -78,30 +28,26 @@ globalThis.noop = function () {
 
 globalThis.noopVoid = function () {};
 
-globalThis.Alert = async function (message, optionsOrTitle = "Alert") {
-  try {
-    // @ts-ignore
-    const { Alert: AlertRN } = await import("react-native");
-    if (typeof optionsOrTitle === "string") {
-      AlertRN.alert(optionsOrTitle, message);
-    } else {
-      const {
-        buttons = [["Ok"]],
-        title = "Alert",
-        cancelable,
-        onDismiss,
-      } = optionsOrTitle;
-      AlertRN.alert(
-        title,
-        message,
-        buttons.map((btn) => {
-          const [text, onPress, style] = btn || [];
-          return { onPress, style, text };
-        }),
-        { cancelable, onDismiss }
-      );
+type TComment = {
+  id: number;
+  text: string;
+  parent_id?: TComment["id"];
+  subMenu?: TComment[];
+};
+
+Array.prototype.nest = function (nestProperty, nestId, nestForeignId) {
+  const array = this;
+  return array.reduce((nested, item) => {
+    item[nestProperty] = array.filter(
+      (itemToCompare) => itemToCompare[nestForeignId] === item[nestId]
+    );
+
+    if (item[nestForeignId] == null) {
+      nested.push(item);
     }
-  } catch (err) {}
+
+    return nested;
+  }, []);
 };
 
 Array.prototype.replace = function (index, data) {
@@ -427,5 +373,3 @@ Object.toQueryParams = function (obj) {
 
   return params.join("&");
 };
-
-export {};
