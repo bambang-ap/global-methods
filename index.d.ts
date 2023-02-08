@@ -68,7 +68,15 @@ declare global {
     sizes?: S;
     fonts?: F;
   };
-  
+  type UnionToIntersection<U> = (
+    U extends any ? (k: U) => void : never
+  ) extends (k: infer I) => void
+    ? I
+    : never;
+
+  type MMapValue<T> = { item: T; isFirst: boolean; isLast: boolean };
+  type MMapCallback<T, U> = (value: MMapValue<T>, index: number) => U;
+
   interface Array<T> {
     toRnStyle: () => T[];
     remove: (index: number) => T[];
@@ -77,12 +85,7 @@ declare global {
       numColumns: number,
       sameCount?: boolean
     ): { data: T[][]; rows: number };
-    mmap<U>(
-      callback: (
-        value: { item: T; isFirst: boolean; isLast: boolean },
-        index: number
-      ) => U
-    ): U[];
+    mmap<U>(callback: MMapCallback<T, U>): U[];
     nest<K extends keyof T>(
       nestProperty: string,
       nestId: K,
