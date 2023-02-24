@@ -73,11 +73,12 @@ Array.prototype.changeOrder = function (fromIndex, toIndex) {
     toIndex >= 0 &&
     toIndex <= dataSource.length
   ) {
-    const data = [...dataSource];
+    const data = dataSource.slice();
     const item = data.splice(fromIndex, 1)[0];
-    return data.splice(toIndex, 0, item);
+    data.splice(toIndex, 0, { item });
+    return data;
   }
-
+  
   return dataSource;
 };
 
