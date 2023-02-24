@@ -64,6 +64,23 @@ Array.prototype.remove = function (index) {
   else return dataR;
 };
 
+Array.prototype.changeOrder = function (fromIndex, toIndex) {
+  const dataSource = this;
+  
+  if (
+    fromIndex >= 0 &&
+    fromIndex <= dataSource.length &&
+    toIndex >= 0 &&
+    toIndex <= dataSource.length
+  ) {
+    const data = [...dataSource];
+    const item = data.splice(fromIndex, 1)[0];
+    return data.splice(toIndex, 0, item);
+  }
+
+  return dataSource;
+};
+
 Array.prototype.generateRows = function (numColumns, sameCount = false) {
   type Ret = ReturnType<Array<unknown>["generateRows"]>;
   const array = this as [];

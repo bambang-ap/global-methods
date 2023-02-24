@@ -81,6 +81,7 @@ declare global {
     toRnStyle: () => T[];
     remove: (index: number) => T[];
     replace: (index: number, data: T) => T[];
+    changeOrder: (fromIndex: number, toIndex: number) => T[];
     generateRows(
       numColumns: number,
       sameCount?: boolean
