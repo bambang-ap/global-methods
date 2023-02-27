@@ -45,6 +45,19 @@ Array.prototype.remove = function (index) {
     else
         return dataR;
 };
+Array.prototype.changeOrder = function (fromIndex, toIndex) {
+    const dataSource = this;
+    if (fromIndex >= 0 &&
+        fromIndex <= dataSource.length &&
+        toIndex >= 0 &&
+        toIndex <= dataSource.length) {
+        const data = dataSource.slice();
+        const item = data.splice(fromIndex, 1)[0];
+        data.splice(toIndex, 0, { item });
+        return data;
+    }
+    return dataSource;
+};
 Array.prototype.generateRows = function (numColumns, sameCount = false) {
     const array = this;
     return array.reduce((ret, curr, i) => {
