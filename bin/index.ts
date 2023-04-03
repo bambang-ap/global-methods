@@ -66,19 +66,18 @@ Array.prototype.remove = function (index) {
 
 Array.prototype.changeOrder = function (fromIndex, toIndex) {
   const dataSource = this;
-  
-  if (
+
+  const valid =
     fromIndex >= 0 &&
-    fromIndex <= dataSource.length &&
+    fromIndex < dataSource.length &&
     toIndex >= 0 &&
-    toIndex <= dataSource.length
-  ) {
-    const data = dataSource.slice();
-    const item = data.splice(fromIndex, 1)[0];
-    data.splice(toIndex, 0, { item });
-    return data;
-  }
-  
+    toIndex < dataSource.length;
+
+  if (!valid) return dataSource;
+
+  const element = dataSource[fromIndex];
+  dataSource.splice(fromIndex, 1);
+  dataSource.splice(toIndex, 0, element);
   return dataSource;
 };
 
