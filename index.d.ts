@@ -81,7 +81,6 @@ declare global {
     toRnStyle: () => T[];
     remove: (index: number) => T[];
     replace: (index: number, data: T) => T[];
-    changeOrder: (fromIndex: number, toIndex: number) => T[];
     generateRows(
       numColumns: number,
       sameCount?: boolean
@@ -133,9 +132,10 @@ declare global {
     toQueryParams(obj: Record<string, string>): string;
   }
 
+  function uuid(): string;
   function noop(): null;
   function noopVoid(): void;
-  function prettyConsole(...args: any[]): void;
   function prettyJSON(object: object): string;
-  function uuid(): string;
+  function prettyConsole(...args: any[]): void;
+  function reorderArrayIndex<T>(array: T[], fromIndex: number, toIndex: number): T[];
 }

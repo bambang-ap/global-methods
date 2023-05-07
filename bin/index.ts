@@ -1,5 +1,19 @@
 /// <reference path="../index.d.ts" />
 
+globalThis.reorderArrayIndex = function (
+  arr: any[],
+  fromIndex: number,
+  toIndex: number
+) {
+  const array = arr.slice();
+  if (fromIndex < 0 || fromIndex >= array.length) return array;
+  if (toIndex < 0 || toIndex >= array.length) return array;
+  const element = array[fromIndex];
+  array.splice(fromIndex, 1);
+  array.splice(toIndex, 0, element);
+  return array;
+};
+
 globalThis.prettyConsole = (...objects) => {
   return objects.forEach((message) =>
     typeof message === "object"
@@ -62,23 +76,6 @@ Array.prototype.remove = function (index) {
   const dataR = state.slice(index + 1);
   if (index > 0) return [...dataL, ...dataR];
   else return dataR;
-};
-
-Array.prototype.changeOrder = function (fromIndex, toIndex) {
-  const dataSource = this;
-
-  const valid =
-    fromIndex >= 0 &&
-    fromIndex < dataSource.length &&
-    toIndex >= 0 &&
-    toIndex < dataSource.length;
-
-  if (!valid) return dataSource;
-
-  const element = dataSource[fromIndex];
-  dataSource.splice(fromIndex, 1);
-  dataSource.splice(toIndex, 0, element);
-  return dataSource;
 };
 
 Array.prototype.generateRows = function (numColumns, sameCount = false) {
