@@ -77,6 +77,8 @@ declare global {
   type MMapValue<T> = { item: T; isFirst: boolean; isLast: boolean };
   type MMapCallback<T, U> = (value: MMapValue<T>, index: number) => U;
 
+  type ObjKeyof<T extends {}> = Extract<keyof T, string>;
+
   interface Array<T> {
     toRnStyle: () => T[];
     remove: (index: number) => T[];
