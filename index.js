@@ -39,12 +39,17 @@ Array.prototype.nest = function (nestProperty, nestId, nestForeignId) {
         return nested;
     }, []);
 };
-Array.prototype.replace = function (index, data) {
+Array.prototype.replace = function (index, dataOrCallback) {
     const state = this;
     const dataL = state.slice(0, index);
     const dataR = state.slice(index + 1);
-    if (index >= 0 && index < (state === null || state === void 0 ? void 0 : state.length))
-        return [...dataL, data, ...dataR];
+    if (index >= 0 && index < (state === null || state === void 0 ? void 0 : state.length)) {
+        if (typeof dataOrCallback === "function") {
+            return [...dataL, dataOrCallback(state[index]), ...dataR];
+        }
+        else
+            return [...dataL, dataOrCallback, ...dataR];
+    }
     return state;
 };
 Array.prototype.remove = function (index) {

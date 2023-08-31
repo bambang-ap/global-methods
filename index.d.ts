@@ -80,9 +80,10 @@ declare global {
   type ObjKeyof<T extends {}> = Extract<keyof T, string>;
 
   interface Array<T> {
+    replace(index: number, data: T): T[];
+    replace(index: number, callback: (data: T) => T): T[];
     toRnStyle: () => T[];
     remove: (index: number) => T[];
-    replace: (index: number, data: T) => T[];
     generateRows(
       numColumns: number,
       sameCount?: boolean
@@ -139,5 +140,9 @@ declare global {
   function noopVoid(): void;
   function prettyJSON(object: object): string;
   function prettyConsole(...args: any[]): void;
-  function reorderArrayIndex<T>(array: T[], fromIndex: number, toIndex: number): T[];
+  function reorderArrayIndex<T>(
+    array: T[],
+    fromIndex: number,
+    toIndex: number
+  ): T[];
 }
