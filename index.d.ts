@@ -79,6 +79,16 @@ declare global {
 
   type ObjKeyof<T extends {}> = Extract<keyof T, string>;
 
+  type NonArrayObject<T> = T extends object
+    ? {
+        [K in keyof T]: T[K] extends object
+          ? NonArrayObject<T[K]> extends any[]
+            ? NonArrayObject<NonArrayObject<T[K]>[number]>
+            : NonArrayObject<T[K]>
+          : T[K];
+      }
+    : "";
+
   interface Array<T> {
     replace(index: number, data: T): T[];
     replace(index: number, callback: (data: T) => T): T[];
