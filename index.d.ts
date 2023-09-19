@@ -79,7 +79,7 @@ declare global {
 
   type ObjKeyof<T extends {}> = Extract<keyof T, string>;
 
-  type NonArrayObjectt<T> = T extends Array<infer V>
+  type NonArrayObject<T> = T extends Array<infer V>
     ? NonArrayObjectt<V>
     : T extends object
     ? { [K in keyof T]: NonArrayObjectt<T[K]> }
