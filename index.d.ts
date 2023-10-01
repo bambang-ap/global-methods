@@ -40,7 +40,7 @@ declare global {
   > = {
     [Key in keyof ObjectType &
       (string | number)]: ObjectType[Key] extends object
-      ? never | `${Key}${Delimiter}${NestedKeyOf<ObjectType[Key]>}`
+      ? never | `${Key}${Delimiter}${NestedKeyOf<ObjectType[Key], Delimiter>}`
       : `${Key}`;
   }[keyof ObjectType & (string | number)];
   type LiteralUnion<T extends U, U = string> = T | (U & { property?: never });
@@ -87,6 +87,12 @@ declare global {
             : NonArrayObject<T[K]>
           : T[K];
       }
+    : T;
+
+  type ObjectNonArray<T> = T extends Array<infer V>
+    ? ObjectNonArray<V>
+    : T extends object
+    ? { [K in keyof T]: ObjectNonArray<T[K]> }
     : T;
 
   interface Array<T> {
