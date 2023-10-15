@@ -34,6 +34,12 @@ globalThis.uuid = () => {
   });
 };
 
+globalThis.entries = function <T extends object>(obj?: T) {
+  if (!obj) return [];
+
+  return Object.entries(obj) as Entries<T>;
+};
+
 globalThis.noop = function () {
   return null;
 };

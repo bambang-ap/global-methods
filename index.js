@@ -25,6 +25,11 @@ globalThis.uuid = () => {
         return v.toString(16);
     });
 };
+globalThis.entries = function (obj) {
+    if (!obj)
+        return [];
+    return Object.entries(obj);
+};
 globalThis.noop = function () {
     return null;
 };

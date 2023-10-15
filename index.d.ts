@@ -95,6 +95,10 @@ declare global {
     ? { [K in keyof T]: ObjectNonArray<T[K]> }
     : T;
 
+  type Entries<T> = {
+    [K in keyof T]: [K, T[K]];
+  }[keyof T][];
+
   interface Array<T> {
     replace(index: number, data: T): T[];
     replace(index: number, callback: (data: T) => T): T[];
@@ -155,6 +159,7 @@ declare global {
   function noop(): null;
   function noopVoid(): void;
   function prettyJSON(object: object): string;
+  function entries<T extends object>(obj?: T): Entries<T>;
   function prettyConsole(...args: any[]): void;
   function reorderArrayIndex<T>(
     array: T[],
