@@ -106,6 +106,12 @@ declare global {
       : never]: TObj[P];
   };
 
+  type OmitIncludes<TObj, K extends keyof TObj> = {
+    [P in keyof TObj as UcWords<P> extends `${infer Beginning}${UcWords<K>}${infer Rest}`
+      ? never
+      : P]: TObj[P];
+  };
+
   interface Array<T> {
     replace(index: number, data: T): T[];
     replace(index: number, callback: (data: T) => T): T[];
