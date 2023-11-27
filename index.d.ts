@@ -99,6 +99,13 @@ declare global {
     [K in keyof T]: [K, T[K]];
   }[keyof T][];
 
+  type UcWords<T> = T extends string ? Capitalize<T> : never;
+  type PickIncludes<TObj, K extends keyof TObj> = {
+    [P in keyof TObj as UcWords<P> extends `${infer Beginning}${UcWords<K>}${infer Rest}`
+      ? P
+      : never]: TObj[P];
+  };
+
   interface Array<T> {
     replace(index: number, data: T): T[];
     replace(index: number, callback: (data: T) => T): T[];
