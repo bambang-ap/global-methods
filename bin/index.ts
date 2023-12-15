@@ -1,5 +1,7 @@
 /// <reference path="../index.d.ts" />
 
+import clsx from "clsx";
+
 globalThis.reorderArrayIndex = function (
   arr: any[],
   fromIndex: number,
@@ -137,23 +139,30 @@ Array.prototype.toRnStyle = function () {
   return styles;
 };
 
-Number.prototype.humanFileSize = function (si = false, dp = 1) {
-  let bytes = this as number;
+Number.prototype.humanize = function (opts) {
+  let bytes = this as number,
+    indexUnit = -1;
+
+  const { si = false, dp = 1, op = "B" } = opts ?? {};
   const thresh = si ? 1000 : 1024;
-  if (Math.abs(bytes) < thresh) return bytes + " B";
+
+  if (Math.abs(bytes) < thresh) return clsx(bytes.toFixed(dp), op);
+
+  const rank = 10 ** dp;
   const units = si
-    ? ["kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
-    : ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"];
-  let u = -1;
-  const r = 10 ** dp;
+    ? ["k", "M", "G", "T", "P", "E", "Z", "Y"]
+    : ["Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi"];
+
+
   do {
     bytes /= thresh;
-    ++u;
+    ++indexUnit;
   } while (
-    Math.round(Math.abs(bytes) * r) / r >= thresh &&
-    u < units.length - 1
+    Math.round(Math.abs(bytes) * rank) / rank >= thresh &&
+    indexUnit < units.length - 1
   );
-  return bytes.toFixed(dp) + " " + units[u];
+
+  return clsx(bytes.toFixed(dp), units[indexUnit], op);
 };
 
 Number.prototype.getPercentage = function calculate(total = 0, dp = 2) {
