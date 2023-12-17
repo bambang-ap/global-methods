@@ -1,4 +1,16 @@
 export {};
+
+type ClassValue =
+  | ClassArray
+  | ClassDictionary
+  | string
+  | number
+  | null
+  | boolean
+  | undefined;
+type ClassDictionary = Record<string, any>;
+type ClassArray = ClassValue[];
+
 declare module "react" {
   function forwardRef<T, P = {}>(
     render: (props: P, ref: React.Ref<T>) => React.ReactElement | null
@@ -182,14 +194,3 @@ declare global {
     toIndex: number
   ): T[];
 }
-
-type ClassValue =
-  | ClassArray
-  | ClassDictionary
-  | string
-  | number
-  | null
-  | boolean
-  | undefined;
-type ClassDictionary = Record<string, any>;
-type ClassArray = ClassValue[];
