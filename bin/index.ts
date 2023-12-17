@@ -1,6 +1,50 @@
 /// <reference path="../index.d.ts" />
 
-import clsx from "clsx";
+function toVal(mix: any) {
+  var k,
+    y,
+    str = "";
+
+  if (typeof mix === "string" || typeof mix === "number") {
+    str += mix;
+  } else if (typeof mix === "object") {
+    if (Array.isArray(mix)) {
+      for (k = 0; k < mix.length; k++) {
+        if (mix[k]) {
+          if ((y = toVal(mix[k]))) {
+            str && (str += " ");
+            str += y;
+          }
+        }
+      }
+    } else {
+      for (k in mix) {
+        if (mix[k]) {
+          str && (str += " ");
+          str += k;
+        }
+      }
+    }
+  }
+
+  return str;
+}
+
+globalThis.classNames = function () {
+  var i = 0,
+    tmp,
+    x,
+    str = "";
+  while (i < arguments.length) {
+    if ((tmp = arguments[i++])) {
+      if ((x = toVal(tmp))) {
+        str && (str += " ");
+        str += x;
+      }
+    }
+  }
+  return str;
+};
 
 globalThis.reorderArrayIndex = function (
   arr: any[],
@@ -146,13 +190,12 @@ Number.prototype.humanize = function (opts) {
   const { si = false, dp = 1, op = "B" } = opts ?? {};
   const thresh = si ? 1000 : 1024;
 
-  if (Math.abs(bytes) < thresh) return clsx(bytes.toFixed(dp), op);
+  if (Math.abs(bytes) < thresh) return classNames(bytes.toFixed(dp), op);
 
   const rank = 10 ** dp;
   const units = si
     ? ["k", "M", "G", "T", "P", "E", "Z", "Y"]
     : ["Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi"];
-
 
   do {
     bytes /= thresh;
@@ -162,7 +205,7 @@ Number.prototype.humanize = function (opts) {
     indexUnit < units.length - 1
   );
 
-  return clsx(bytes.toFixed(dp), units[indexUnit], op);
+  return classNames(bytes.toFixed(dp), units[indexUnit], op);
 };
 
 Number.prototype.getPercentage = function calculate(total = 0, dp = 2) {

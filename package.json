@@ -1,6 +1,6 @@
 {
     "name": "global-methods",
-    "version": "2.3.2",
+    "version": "2.4.0",
     "keywords": [
         "global-methods",
         "globalThis",
@@ -33,8 +33,5 @@
     },
     "devDependencies": {
         "typescript": "^4.8.4"
-    },
-    "dependencies": {
-        "clsx": "2.0.0"
     }
 }

@@ -1,10 +1,44 @@
 "use strict";
 /// <reference path="../index.d.ts" />
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+function toVal(mix) {
+    var k, y, str = "";
+    if (typeof mix === "string" || typeof mix === "number") {
+        str += mix;
+    }
+    else if (typeof mix === "object") {
+        if (Array.isArray(mix)) {
+            for (k = 0; k < mix.length; k++) {
+                if (mix[k]) {
+                    if ((y = toVal(mix[k]))) {
+                        str && (str += " ");
+                        str += y;
+                    }
+                }
+            }
+        }
+        else {
+            for (k in mix) {
+                if (mix[k]) {
+                    str && (str += " ");
+                    str += k;
+                }
+            }
+        }
+    }
+    return str;
+}
+globalThis.classNames = function () {
+    var i = 0, tmp, x, str = "";
+    while (i < arguments.length) {
+        if ((tmp = arguments[i++])) {
+            if ((x = toVal(tmp))) {
+                str && (str += " ");
+                str += x;
+            }
+        }
+    }
+    return str;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const clsx_1 = __importDefault(require("clsx"));
 globalThis.reorderArrayIndex = function (arr, fromIndex, toIndex) {
     const array = arr.slice();
     if (fromIndex < 0 || fromIndex >= array.length)
@@ -116,7 +150,7 @@ Number.prototype.humanize = function (opts) {
     const { si = false, dp = 1, op = "B" } = opts !== null && opts !== void 0 ? opts : {};
     const thresh = si ? 1000 : 1024;
     if (Math.abs(bytes) < thresh)
-        return (0, clsx_1.default)(bytes.toFixed(dp), op);
+        return classNames(bytes.toFixed(dp), op);
     const rank = 10 ** dp;
     const units = si
         ? ["k", "M", "G", "T", "P", "E", "Z", "Y"]
@@ -126,7 +160,7 @@ Number.prototype.humanize = function (opts) {
         ++indexUnit;
     } while (Math.round(Math.abs(bytes) * rank) / rank >= thresh &&
         indexUnit < units.length - 1);
-    return (0, clsx_1.default)(bytes.toFixed(dp), units[indexUnit], op);
+    return classNames(bytes.toFixed(dp), units[indexUnit], op);
 };
 Number.prototype.getPercentage = function calculate(total = 0, dp = 2) {
     const current = this;

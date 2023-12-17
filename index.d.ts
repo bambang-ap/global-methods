@@ -135,7 +135,7 @@ declare global {
      * @param dp Number of decimal places to display.
      * @param op String | False @default 'B' as Byte. Set to False if you want to hide operator
      */
-    humanize(opts?: { si?: boolean; dp?: number ,op?:string|false}): string;
+    humanize(opts?: { si?: boolean; dp?: number; op?: string | false }): string;
     getPercentage(total?: number, dp?: number): number;
     ratio(ratio: string): { width: number; height: number };
     toRoman(): string;
@@ -169,6 +169,7 @@ declare global {
     toQueryParams(obj: Record<string, string>): string;
   }
 
+  function classNames(...inputs: ClassValue[]): string;
   function uuid(): string;
   function noop(): null;
   function noopVoid(): void;
@@ -181,3 +182,14 @@ declare global {
     toIndex: number
   ): T[];
 }
+
+type ClassValue =
+  | ClassArray
+  | ClassDictionary
+  | string
+  | number
+  | null
+  | boolean
+  | undefined;
+type ClassDictionary = Record<string, any>;
+type ClassArray = ClassValue[];
