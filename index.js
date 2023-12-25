@@ -147,13 +147,13 @@ Array.prototype.toRnStyle = function () {
 };
 Number.prototype.humanize = function (opts) {
     let bytes = this, indexUnit = -1;
-    const { si = false, dp = 1, op = "B" } = opts !== null && opts !== void 0 ? opts : {};
+    const { si = true, dp = 1, op = "B" } = opts !== null && opts !== void 0 ? opts : {};
     const thresh = si ? 1000 : 1024;
     if (Math.abs(bytes) < thresh)
         return classNames(bytes.toFixed(dp), op);
     const rank = 10 ** dp;
     const units = si
-        ? ["k", "M", "G", "T", "P", "E", "Z", "Y"]
+        ? ["K", "M", "G", "T", "P", "E", "Z", "Y"]
         : ["Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi"];
     do {
         bytes /= thresh;
