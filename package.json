@@ -1,6 +1,6 @@
 {
     "name": "global-methods",
-    "version": "2.4.1",
+    "version": "2.5.0",
     "keywords": [
         "global-methods",
         "globalThis",
@@ -32,6 +32,7 @@
         "react": "*"
     },
     "devDependencies": {
+        "@types/node": "20.11.5",
         "typescript": "^4.8.4"
     }
 }

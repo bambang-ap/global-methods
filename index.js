@@ -55,6 +55,11 @@ globalThis.prettyConsole = (...objects) => {
         ? console.log(prettyJSON(message))
         : console.log(message));
 };
+let typingTimer;
+globalThis.typingDebounce = function (callback, timeout = 500) {
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(callback, timeout);
+};
 globalThis.prettyJSON = (object) => {
     return JSON.stringify(object, null, 4);
 };
