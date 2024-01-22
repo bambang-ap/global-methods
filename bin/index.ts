@@ -30,7 +30,6 @@ function toVal(mix: any) {
   return str;
 }
 
-
 globalThis.toQueryParams = function (obj) {
   const params = Object.entries(obj).reduce<string[]>((ret, [key, value]) => {
     if (value !== undefined) ret.push(`${key}=${value}`);
@@ -40,7 +39,6 @@ globalThis.toQueryParams = function (obj) {
 
   return params.join("&");
 };
-
 
 globalThis.classNames = function () {
   var i = 0,
@@ -398,58 +396,58 @@ String.prototype.validURL = function () {
   return !!pattern.test(str);
 };
 
-String.prototype.getQueryParams = String.prototype.toStringFromQueryParams =
-  function () {
-    const url = this as string;
-    const query = url.substring(url.indexOf("?") + 1);
-    if (query.includes(url)) return {};
-    const re = /([^&=]+)=?([^&]*)/g;
-    const decodeRE = /\+/g;
-    const decode = (str: string) => {
-      return decodeURIComponent(str.replace(decodeRE, " "));
-    };
-    let e = re.exec(query);
-    const params: MyObject = {};
-    while (e) {
-      let k = decode(e[1]);
-      const v = decode(e[2]);
-      if (k.substring(k.length - 2) === "[]") {
-        k = k.substring(0, k.length - 2);
+String.prototype.getQueryParams = String.prototype.toQueryParams = function <
+  T extends object
+>(): T {
+  const url = this as string;
+  const query = url.substring(url.indexOf("?") + 1);
+  if (query.includes(url)) return {} as T;
+  const re = /([^&=]+)=?([^&]*)/g;
+  const decodeRE = /\+/g;
+
+  let e = re.exec(query);
+  const params: MyObject = {};
+  while (e) {
+    let k = decode(e[1]);
+    const v = decode(e[2]);
+    if (k.substring(k.length - 2) === "[]") {
+      k = k.substring(0, k.length - 2);
+      // @ts-ignore
+      (params[k] || (params[k] = [])).push(v);
+    } else params[k] = v;
+  }
+
+  for (const prop in params) {
+    const structure = prop.split("[");
+    if (structure.length > 1) {
+      const levels: any = [];
+      structure.forEach(function (item) {
+        const key = item.replace(/[?[\]\\ ]/g, "");
+        levels.push(key);
+      });
+      assign(params, levels, params[prop]);
+      delete params[prop];
+    }
+  }
+
+  function decode(str: string) {
+    return decodeURIComponent(str.replace(decodeRE, " "));
+  }
+
+  function assign(obj: MyObject<any>, keyPath: string, value: string) {
+    const lastKeyIndex = keyPath.length - 1;
+    for (let i = 0; i < lastKeyIndex; ++i) {
+      const key = keyPath[i];
+      if (!(key in obj))
         // @ts-ignore
-        (params[k] || (params[k] = [])).push(v);
-      } else params[k] = v;
+        obj[key] = {}; // @ts-ignore
+      obj = obj[key];
     }
+    obj[keyPath[lastKeyIndex]] = value;
+  }
 
-    const assign = function (
-      obj: MyObject<any>,
-      keyPath: string,
-      value: string
-    ) {
-      const lastKeyIndex = keyPath.length - 1;
-      for (let i = 0; i < lastKeyIndex; ++i) {
-        const key = keyPath[i];
-        if (!(key in obj))
-          // @ts-ignore
-          obj[key] = {}; // @ts-ignore
-        obj = obj[key];
-      }
-      obj[keyPath[lastKeyIndex]] = value;
-    };
-
-    for (const prop in params) {
-      const structure = prop.split("[");
-      if (structure.length > 1) {
-        const levels: any = [];
-        structure.forEach(function (item) {
-          const key = item.replace(/[?[\]\\ ]/g, "");
-          levels.push(key);
-        });
-        assign(params, levels, params[prop]);
-        delete params[prop];
-      }
-    }
-    return params;
-  };
+  return params as T;
+};
 
 Math.randomInt = function (min, max) {
   min = Math.ceil(min);
