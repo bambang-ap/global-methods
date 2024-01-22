@@ -31,7 +31,7 @@ function toVal(mix: any) {
 }
 
 
-globalThis.getQueryParams = function (obj) {
+globalThis.toQueryParams = function (obj) {
   const params = Object.entries(obj).reduce<string[]>((ret, [key, value]) => {
     if (value !== undefined) ret.push(`${key}=${value}`);
 
