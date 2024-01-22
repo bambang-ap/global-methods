@@ -30,6 +30,18 @@ function toVal(mix: any) {
   return str;
 }
 
+
+globalThis.getQueryParams = function (obj) {
+  const params = Object.entries(obj).reduce<string[]>((ret, [key, value]) => {
+    if (value !== undefined) ret.push(`${key}=${value}`);
+
+    return ret;
+  }, []);
+
+  return params.join("&");
+};
+
+
 globalThis.classNames = function () {
   var i = 0,
     tmp,
@@ -443,14 +455,4 @@ Math.randomInt = function (min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
-Object.toQueryParams = function (obj) {
-  const params = Object.entries(obj).reduce<string[]>((ret, [key, value]) => {
-    if (value !== undefined) ret.push(`${key}=${value}`);
-
-    return ret;
-  }, []);
-
-  return params.join("&");
 };

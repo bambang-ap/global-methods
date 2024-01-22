@@ -177,10 +177,7 @@ declare global {
     randomInt: (min: number, max: number) => number;
   }
 
-  interface Object {
-    toQueryParams(obj: Record<string, string>): string;
-  }
-
+  function getQueryParams(obj: Record<string, string>): string;
   function typingDebounce(callback: NoopVoid, timeout?: number): void;
   function classNames(...inputs: ClassValue[]): string;
   function uuid(): string;
