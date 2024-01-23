@@ -397,56 +397,15 @@ String.prototype.validURL = function () {
 };
 
 String.prototype.getQueryParams = String.prototype.toQueryParams = function <
-  T extends object
->(): T {
+  T extends string
+>() {
   const url = this as string;
-  const query = url.substring(url.indexOf("?") + 1);
-  if (query.includes(url)) return {} as T;
-  const re = /([^&=]+)=?([^&]*)/g;
-  const decodeRE = /\+/g;
 
-  let e = re.exec(query);
-  const params: MyObject = {};
-  while (e) {
-    let k = decode(e[1]);
-    const v = decode(e[2]);
-    if (k.substring(k.length - 2) === "[]") {
-      k = k.substring(0, k.length - 2);
-      // @ts-ignore
-      (params[k] || (params[k] = [])).push(v);
-    } else params[k] = v;
-  }
+  if (!url.validURL()) return null;
 
-  for (const prop in params) {
-    const structure = prop.split("[");
-    if (structure.length > 1) {
-      const levels: any = [];
-      structure.forEach(function (item) {
-        const key = item.replace(/[?[\]\\ ]/g, "");
-        levels.push(key);
-      });
-      assign(params, levels, params[prop]);
-      delete params[prop];
-    }
-  }
+  const { searchParams } = new URL(url);
 
-  function decode(str: string) {
-    return decodeURIComponent(str.replace(decodeRE, " "));
-  }
-
-  function assign(obj: MyObject<any>, keyPath: string, value: string) {
-    const lastKeyIndex = keyPath.length - 1;
-    for (let i = 0; i < lastKeyIndex; ++i) {
-      const key = keyPath[i];
-      if (!(key in obj))
-        // @ts-ignore
-        obj[key] = {}; // @ts-ignore
-      obj = obj[key];
-    }
-    obj[keyPath[lastKeyIndex]] = value;
-  }
-
-  return params as T;
+  return Object.fromEntries(searchParams) as Record<T, string>;
 };
 
 Math.randomInt = function (min, max) {

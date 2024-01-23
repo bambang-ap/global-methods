@@ -322,51 +322,10 @@ String.prototype.validURL = function () {
 };
 String.prototype.getQueryParams = String.prototype.toQueryParams = function () {
     const url = this;
-    const query = url.substring(url.indexOf("?") + 1);
-    if (query.includes(url))
-        return {};
-    const re = /([^&=]+)=?([^&]*)/g;
-    const decodeRE = /\+/g;
-    let e = re.exec(query);
-    const params = {};
-    while (e) {
-        let k = decode(e[1]);
-        const v = decode(e[2]);
-        if (k.substring(k.length - 2) === "[]") {
-            k = k.substring(0, k.length - 2);
-            // @ts-ignore
-            (params[k] || (params[k] = [])).push(v);
-        }
-        else
-            params[k] = v;
-    }
-    for (const prop in params) {
-        const structure = prop.split("[");
-        if (structure.length > 1) {
-            const levels = [];
-            structure.forEach(function (item) {
-                const key = item.replace(/[?[\]\\ ]/g, "");
-                levels.push(key);
-            });
-            assign(params, levels, params[prop]);
-            delete params[prop];
-        }
-    }
-    function decode(str) {
-        return decodeURIComponent(str.replace(decodeRE, " "));
-    }
-    function assign(obj, keyPath, value) {
-        const lastKeyIndex = keyPath.length - 1;
-        for (let i = 0; i < lastKeyIndex; ++i) {
-            const key = keyPath[i];
-            if (!(key in obj))
-                // @ts-ignore
-                obj[key] = {}; // @ts-ignore
-            obj = obj[key];
-        }
-        obj[keyPath[lastKeyIndex]] = value;
-    }
-    return params;
+    if (!url.validURL())
+        return null;
+    const { searchParams } = new URL(url);
+    return Object.fromEntries(searchParams);
 };
 Math.randomInt = function (min, max) {
     min = Math.ceil(min);

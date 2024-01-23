@@ -169,8 +169,8 @@ declare global {
     removeSpecialChar(): string;
     validURL(): boolean;
     getRawUrl(): string | false;
-    getQueryParams<T extends object>(): T;
-    toQueryParams<T extends object>(): T;
+    getQueryParams<T extends string>(): null | Record<T, string>;
+    toQueryParams<T extends string>(): null | Record<T, string>;
   }
 
   interface Math {
