@@ -403,9 +403,18 @@ String.prototype.getQueryParams = String.prototype.toQueryParams = function <
 
   if (!url.validURL()) return null;
 
-  const { searchParams } = new URL(url);
+  const regex = /[?&]([^=#]+)=([^&#]*)/g;
 
-  return Object.fromEntries(searchParams) as Record<T, string>;
+  let match: null | RegExpExecArray,
+    params = {} as Record<T, string>;
+
+  while ((match = regex.exec(url))) {
+    if (!match) continue;
+    const [, key, value] = match;
+    params[key as T] = value;
+  }
+
+  return params;
 };
 
 Math.randomInt = function (min, max) {

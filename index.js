@@ -324,8 +324,15 @@ String.prototype.getQueryParams = String.prototype.toQueryParams = function () {
     const url = this;
     if (!url.validURL())
         return null;
-    const { searchParams } = new URL(url);
-    return Object.fromEntries(searchParams);
+    const regex = /[?&]([^=#]+)=([^&#]*)/g;
+    let match, params = {};
+    while ((match = regex.exec(url))) {
+        if (!match)
+            continue;
+        const [, key, value] = match;
+        params[key] = value;
+    }
+    return params;
 };
 Math.randomInt = function (min, max) {
     min = Math.ceil(min);
