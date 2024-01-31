@@ -115,6 +115,29 @@ type TComment = {
   subMenu?: TComment[];
 };
 
+Array.prototype.sortOrder = function (order, callback) {
+  const arr = this as unknown[];
+  const [leftSide, rightSide]: [unknown[], unknown[]] = [[], []];
+
+  for (const item of arr) {
+    const index = order.indexOf(callback(item));
+    if (index < 0) rightSide.push(item);
+    else leftSide.push(item);
+  }
+
+  const orderedRightSide = rightSide.sort((a, b) => {
+    return +callback(a) - +callback(b);
+  });
+
+  const orderedLeftSide = leftSide.sort((a, b) => {
+    return order.indexOf(callback(a)) - order.indexOf(callback(b));
+  });
+
+  const result = [...orderedLeftSide, ...orderedRightSide];
+
+  return arr;
+};
+
 Array.prototype.nest = function (nestProperty, nestId, nestForeignId) {
   const array = this;
   return array.reduce((nested, item) => {

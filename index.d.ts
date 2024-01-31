@@ -128,6 +128,10 @@ declare global {
   type PartialOne<T, K extends keyof T> = AtLeast<T, Exclude<keyof T, K>>;
 
   interface Array<T> {
+    sortOrder<V extends number | string, J extends (value: T) => V>(
+      order: V[],
+      callback: J
+    ): T[];
     replace(index: number, data: T): T[];
     replace(index: number, callback: (data: T) => T): T[];
     toRnStyle: () => T[];
