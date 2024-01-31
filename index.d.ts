@@ -124,6 +124,9 @@ declare global {
       : P]: TObj[P];
   };
 
+  type AtLeast<T, K extends keyof T> = Partial<T> & Pick<T, K>;
+  type PartialOne<T, K extends keyof T> = AtLeast<T, Exclude<keyof T, K>>;
+
   interface Array<T> {
     replace(index: number, data: T): T[];
     replace(index: number, callback: (data: T) => T): T[];
