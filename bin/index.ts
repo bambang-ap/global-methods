@@ -135,7 +135,7 @@ Array.prototype.sortOrder = function (order, callback) {
 
   const result = [...orderedLeftSide, ...orderedRightSide];
 
-  return arr;
+  return result;
 };
 
 Array.prototype.nest = function (nestProperty, nestId, nestForeignId) {

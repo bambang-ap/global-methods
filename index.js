@@ -103,7 +103,7 @@ Array.prototype.sortOrder = function (order, callback) {
         return order.indexOf(callback(a)) - order.indexOf(callback(b));
     });
     const result = [...orderedLeftSide, ...orderedRightSide];
-    return arr;
+    return result;
 };
 Array.prototype.nest = function (nestProperty, nestId, nestForeignId) {
     const array = this;
