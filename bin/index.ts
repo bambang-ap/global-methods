@@ -230,7 +230,7 @@ String.prototype.humanize = Number.prototype.humanize = function (opts) {
   const thresh = si ? 1000 : 1024;
 
   if (Math.abs(bytes) < thresh)
-    return [(bytes.toFixed(dp), op)].filter(Boolean).join("");
+    return [bytes.toFixed(dp), op].filter(Boolean).join("");
 
   const rank = 10 ** dp;
   const units = si
