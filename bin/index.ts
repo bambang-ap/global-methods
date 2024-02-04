@@ -223,19 +223,20 @@ Array.prototype.toRnStyle = function () {
 };
 
 String.prototype.humanize = Number.prototype.humanize = function (opts) {
-  let bytes = parseFloat(this.toString()) as number,
+  let bytes = (parseFloat(this.toString()) ?? 0) as number,
     indexUnit = -1;
 
-  const { si = true, dp = 1, op = "B" } = opts ?? {};
+  const { si = true, dp = 1, op = "B", units: replaceUnits } = opts ?? {};
   const thresh = si ? 1000 : 1024;
 
   if (Math.abs(bytes) < thresh)
     return [bytes.toFixed(dp), op].filter(Boolean).join("");
 
   const rank = 10 ** dp;
-  const units = si
-    ? ["K", "M", "G", "T", "P", "E", "Z", "Y"]
-    : ["Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi"];
+  const units =
+    replaceUnits || si
+      ? ["K", "M", "G", "T", "P", "E", "Z", "Y"]
+      : ["Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi"];
 
   do {
     bytes /= thresh;

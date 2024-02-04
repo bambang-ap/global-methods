@@ -178,13 +178,14 @@ Array.prototype.toRnStyle = function () {
     return styles;
 };
 String.prototype.humanize = Number.prototype.humanize = function (opts) {
-    let bytes = parseFloat(this.toString()), indexUnit = -1;
-    const { si = true, dp = 1, op = "B" } = opts !== null && opts !== void 0 ? opts : {};
+    var _a;
+    let bytes = ((_a = parseFloat(this.toString())) !== null && _a !== void 0 ? _a : 0), indexUnit = -1;
+    const { si = true, dp = 1, op = "B", units: replaceUnits } = opts !== null && opts !== void 0 ? opts : {};
     const thresh = si ? 1000 : 1024;
     if (Math.abs(bytes) < thresh)
         return [bytes.toFixed(dp), op].filter(Boolean).join("");
     const rank = 10 ** dp;
-    const units = si
+    const units = replaceUnits || si
         ? ["K", "M", "G", "T", "P", "E", "Z", "Y"]
         : ["Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi"];
     do {

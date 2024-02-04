@@ -149,12 +149,24 @@ declare global {
   }
 
   interface Number {
-    /**
-     * @param si True to use metric (SI) units, aka powers of 1000. False to use binary (IEC), aka powers of 1024.
-     * @param dp Number of decimal places to display.
-     * @param op String | False @default 'B' as Byte. Set to False if you want to hide operator
-     */
-    humanize(opts?: { si?: boolean; dp?: number; op?: string | false }): string;
+    humanize(opts?: {
+      /**
+       * @param si True to use metric (SI) units, aka powers of 1000. False to use binary (IEC), aka powers of 1024.
+       */
+      si?: boolean;
+      /**
+       * @param dp Number of decimal places to display.
+       */
+      dp?: number;
+      /**
+       * @param op String | False @default 'B' as Byte. Set to False if you want to hide operator
+       */
+      op?: string | false;
+      /**
+       * @param units String[] @default ["K", "M", "G", "T", "P", "E", "Z", "Y"]
+       */
+      units?: string[];
+    }): string;
     getPercentage(total?: number, dp?: number): number;
     ratio(ratio: string): { width: number; height: number };
     toRoman(): string;
