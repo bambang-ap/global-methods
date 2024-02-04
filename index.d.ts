@@ -162,6 +162,7 @@ declare global {
   }
 
   interface String {
+    humanize: Number["humanize"];
     extractNumber(): number;
     pascalToSpace(): string;
     kebabToCamel(): string;

@@ -177,8 +177,8 @@ Array.prototype.toRnStyle = function () {
     }, []);
     return styles;
 };
-Number.prototype.humanize = function (opts) {
-    let bytes = this, indexUnit = -1;
+String.prototype.humanize = Number.prototype.humanize = function (opts) {
+    let bytes = parseFloat(this.toString()), indexUnit = -1;
     const { si = true, dp = 1, op = "B" } = opts !== null && opts !== void 0 ? opts : {};
     const thresh = si ? 1000 : 1024;
     if (Math.abs(bytes) < thresh)

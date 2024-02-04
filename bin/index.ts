@@ -222,8 +222,8 @@ Array.prototype.toRnStyle = function () {
   return styles;
 };
 
-Number.prototype.humanize = function (opts) {
-  let bytes = this as number,
+String.prototype.humanize = Number.prototype.humanize = function (opts) {
+  let bytes = parseFloat(this.toString()) as number,
     indexUnit = -1;
 
   const { si = true, dp = 1, op = "B" } = opts ?? {};
