@@ -163,6 +163,10 @@ declare global {
        */
       op?: string | false;
       /**
+       * @param opMin String operator for bellow threshold
+       */
+      opMin?: string;
+      /**
        * @param units String[] @default ["K", "M", "G", "T", "P", "E", "Z", "Y"]
        */
       units?: string[];

@@ -180,10 +180,10 @@ Array.prototype.toRnStyle = function () {
 String.prototype.humanize = Number.prototype.humanize = function (opts) {
     const num = parseFloat(this.toString());
     let bytes = Number.isNaN(num) ? 0 : num, indexUnit = -1;
-    const { si = true, dp = 1, op = "B", units: replaceUnits } = opts !== null && opts !== void 0 ? opts : {};
+    const { opMin, dp = 1, op = "B", si = true, units: replaceUnits, } = opts !== null && opts !== void 0 ? opts : {};
     const thresh = si ? 1000 : 1024;
     if (Math.abs(bytes) < thresh)
-        return [bytes.toFixed(dp), op].filter(Boolean).join("");
+        return classNames(bytes.toFixed(dp), opMin || op);
     const rank = 10 ** dp;
     const units = replaceUnits ||
         (si
