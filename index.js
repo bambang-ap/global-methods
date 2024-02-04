@@ -182,7 +182,7 @@ Number.prototype.humanize = function (opts) {
     const { si = true, dp = 1, op = "B" } = opts !== null && opts !== void 0 ? opts : {};
     const thresh = si ? 1000 : 1024;
     if (Math.abs(bytes) < thresh)
-        return classNames(bytes.toFixed(dp), op);
+        return [(bytes.toFixed(dp), op)].filter(Boolean).join("");
     const rank = 10 ** dp;
     const units = si
         ? ["K", "M", "G", "T", "P", "E", "Z", "Y"]
@@ -192,7 +192,7 @@ Number.prototype.humanize = function (opts) {
         ++indexUnit;
     } while (Math.round(Math.abs(bytes) * rank) / rank >= thresh &&
         indexUnit < units.length - 1);
-    return classNames(bytes.toFixed(dp), units[indexUnit], op);
+    return classNames(bytes.toFixed(dp), [units[indexUnit], op].filter(Boolean).join(""));
 };
 Number.prototype.getPercentage = function calculate(total = 0, dp = 2) {
     const current = this;

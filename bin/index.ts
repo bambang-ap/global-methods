@@ -229,7 +229,8 @@ Number.prototype.humanize = function (opts) {
   const { si = true, dp = 1, op = "B" } = opts ?? {};
   const thresh = si ? 1000 : 1024;
 
-  if (Math.abs(bytes) < thresh) return classNames(bytes.toFixed(dp), op);
+  if (Math.abs(bytes) < thresh)
+    return [(bytes.toFixed(dp), op)].filter(Boolean).join("");
 
   const rank = 10 ** dp;
   const units = si
@@ -244,7 +245,10 @@ Number.prototype.humanize = function (opts) {
     indexUnit < units.length - 1
   );
 
-  return classNames(bytes.toFixed(dp), units[indexUnit], op);
+  return classNames(
+    bytes.toFixed(dp),
+    [units[indexUnit], op].filter(Boolean).join("")
+  );
 };
 
 Number.prototype.getPercentage = function calculate(total = 0, dp = 2) {
