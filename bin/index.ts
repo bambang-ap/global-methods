@@ -223,7 +223,8 @@ Array.prototype.toRnStyle = function () {
 };
 
 String.prototype.humanize = Number.prototype.humanize = function (opts) {
-  let bytes = (parseFloat(this.toString()) ?? 0) as number,
+  const num = parseFloat(this.toString());
+  let bytes = Number.isNaN(num) ? 0 : num,
     indexUnit = -1;
 
   const { si = true, dp = 1, op = "B", units: replaceUnits } = opts ?? {};
@@ -234,9 +235,10 @@ String.prototype.humanize = Number.prototype.humanize = function (opts) {
 
   const rank = 10 ** dp;
   const units =
-    replaceUnits || si
+    replaceUnits ||
+    (si
       ? ["K", "M", "G", "T", "P", "E", "Z", "Y"]
-      : ["Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi"];
+      : ["Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi"]);
 
   do {
     bytes /= thresh;
