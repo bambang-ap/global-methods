@@ -198,7 +198,15 @@ declare global {
   }
 
   interface Math {
-    randomInt: (min: number, max: number) => number;
+    randomInt(min: number, max: number): number;
+    /** Addition n + n */
+    add(initValue: number , ...values: (number | string)[]): number;
+    /** Subtraction n - n */
+    subtract: Math["add"];
+    /** Multiplication n x n */
+    multiply: Math["add"];
+    /** Division n ÷ n */
+    div: Math["add"];
   }
 
   function toQueryParams(obj: Record<string, string>): string;

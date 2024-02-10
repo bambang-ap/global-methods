@@ -360,3 +360,15 @@ Math.randomInt = function (min, max) {
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
+Math.add = function (init, ...values) {
+    return values.reduce((t, c) => { var _a; return t + parseFloat((_a = c === null || c === void 0 ? void 0 : c.toString()) !== null && _a !== void 0 ? _a : "0"); }, init);
+};
+Math.subtract = function (init, ...values) {
+    return values.reduce((t, c) => { var _a; return t - parseFloat((_a = c === null || c === void 0 ? void 0 : c.toString()) !== null && _a !== void 0 ? _a : "0"); }, init);
+};
+Math.multiply = function (init, ...values) {
+    return values.reduce((t, c) => { var _a; return t * parseFloat((_a = c === null || c === void 0 ? void 0 : c.toString()) !== null && _a !== void 0 ? _a : "0"); }, init);
+};
+Math.div = function (init, ...values) {
+    return values.reduce((t, c) => { var _a; return t / parseFloat((_a = c === null || c === void 0 ? void 0 : c.toString()) !== null && _a !== void 0 ? _a : "0"); }, init);
+};

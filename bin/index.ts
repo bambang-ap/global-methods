@@ -458,3 +458,32 @@ Math.randomInt = function (min, max) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
+
+Math.add = function (init, ...values) {
+  return values.reduce<number>(
+    (t, c) => t + parseFloat(c?.toString() ?? "0"),
+    init
+  );
+};
+
+Math.subtract = function (init, ...values) {
+  return values.reduce<number>(
+    (t, c) => t - parseFloat(c?.toString() ?? "0"),
+    init
+  );
+};
+
+Math.multiply = function (init, ...values) {
+  return values.reduce<number>(
+    (t, c) => t * parseFloat(c?.toString() ?? "0"),
+    init
+  );
+};
+
+Math.div = function (init, ...values) {
+  return values.reduce<number>(
+    (t, c) => t / parseFloat(c?.toString() ?? "0"),
+    init
+  );
+};
+
