@@ -128,27 +128,81 @@ declare global {
 	type PartialOne<T, K extends keyof T> = AtLeast<T, Exclude<keyof T, K>>;
 
 	interface Array<T> {
+		/**
+		 * Sort an array in place based on order parameter
+		 * @param order (number | string)[]
+		 * @param callback (value: T) => V
+		 * 
+		 * @example
+		 * console.log([{ prop: 1 }, { prop: 2 }, { prop: 3 }].sort([2, 3, 1], v => v.prop))
+		 * // [{ prop: 2 }, { prop: 3 }, { prop: 1 }]
+		 */
 		sortOrder<V extends number | string, J extends (value: T) => V>(
 			order: V[],
 			callback: J
 		): T[];
+		/**
+		 * Replace array of index n with data
+		 * @param index number
+		 * @param data T
+		 */
 		replace(index: number, data: T): T[];
+		/**
+		 * Replace array of index n with callback data
+		 * @param index number
+		 * @param callback (data: T) => T
+		 */
 		replace(index: number, callback: (data: T) => T): T[];
 		toRnStyle: () => T[];
+		/** Remove array of index n */
 		remove: (index: number) => T[];
+		/**
+		 * Generate multidimensional array for generating rows
+		 * @param numColumns number
+		 * @param sameCount boolean
+		 * 
+		 * @example
+		 * [1,2,3,4,5].generateRows(3) -> [[1, 2, 3], [4, 5]]
+		 * [1,2,3,4,5].generateRows(3, true) -> [[1, 2, 3], [4, 5, null]]
+		 */
 		generateRows(
 			numColumns: number,
 			sameCount?: boolean
 		): { data: T[][]; rows: number };
+		/**
+		 * Regular mapping array with more callback value
+		 * @param callback 
+		 */
 		mmap<U>(callback: MMapCallback<T, U>): U[];
-		nest<K extends keyof T>(
-			nestProperty: string,
+		/**
+		 * Change the array structure, this method is suitable for generating submenus
+		 * @param nestProperty 
+		 * @param nestId 
+		 * @param nestForeignId 
+		 * 
+		 * @example
+		 * [{ id: "123", parent_id: null, }, { parent_id: "123", id: "111", }].nest('subMenu', 'id', 'parent_id')
+		 * // [{"id":"123","parent_id":null,"subMenu":[{"parent_id":"123","id":"111"}]}]
+		 */
+		nest<NP extends string, K extends keyof T, FK extends Exclude<keyof T, K>>(
+			nestProperty: NP,
 			nestId: K,
-			nestForeignId: K
+			nestForeignId: FK
+		): Record<NP, T[]> & T extends infer U ? U[] : never
+		/**
+		 * 
+		 * @param fromIndex number
+		 * @param toIndex number
+		 */
+		reorderIndex(
+			fromIndex: number,
+			toIndex: number
 		): T[];
 	}
 
+
 	interface Number {
+		/** Convert number to readable value */
 		humanize(opts?: {
 			/**
 			 * @param si True to use metric (SI) units, aka powers of 1000. False to use binary (IEC), aka powers of 1024.
@@ -171,33 +225,79 @@ declare global {
 			 */
 			units?: string[];
 		}): string;
-		getPercentage(total?: number, dp?: number): number;
-		ratio(ratio: string): { width: number; height: number };
+		/** Get percentage of current number of total */
+		getPercentage(total?: number, decimalPoint?: number): number;
+		/**
+		 * An number utility to get width & height using aspectRatio
+		 * @param aspectRatio 
+		 */
+		ratio(aspectRatio: `${number}:${number}`): { width: number; height: number };
+		/** Convert number to roman number
+		 * @example 1 -> I, 2 -> II
+		 */
 		toRoman(): string;
+		/**
+		 * You can use this to cover number to alphabet
+		 * @example 1 -> a, 2 -> b, 27 -> aa
+		 */
 		toAlphabet(): string;
 	}
 
 	interface String {
+		/** Convert number to readable value */
 		humanize: Number["humanize"];
+		/**
+		 * Extract number from string
+		 * @example "1a2b3c" -> 123
+		 */
 		extractNumber(): number;
+		/**
+		 * Convert pascal case to space case
+		 * @example "PascalCase" -> "Pascal Case"
+		 */
 		pascalToSpace(): string;
+		/**
+		 * Convert kebab case to camel case
+		 * @example "kebab-case" -> "kebabCase"
+		 */
 		kebabToCamel(): string;
+		/**
+		 * Convert snake case to camel case
+		 * @example "snake_case" -> "snakeCase"
+		 */
 		snakeToCamel(): string;
+		/**
+		 * Convert camel case to snake case
+		 * @example "camelCase" -> "camel_case"
+		 */
 		camelToSnake(): string;
+		/**
+		 * Convert camel case to camel case
+		 * @example "camelCase" -> "camel-Case"
+		 */
 		camelToKebab(): string;
+		/** Uppercase first @example "abc def" -> "Abc def" */
 		ucfirst(): string;
+		/** Uppercase first @example "ABC DEF" -> "aBC DEF" */
 		lcfirst(): string;
+		/** Uppercase first @example "abc def" -> "Abc Def" */
 		ucwords(): string;
+		/** Trim spaces @example "this   is   my       world" -> "this is my world" */
 		trimSpaces(): string;
+		/** Check if the string is base64 files */
 		isBase64File(): boolean;
+		/** Remove special characters @example "a&b(c:d>12(**4" -> "abcd1234" */
 		removeSpecialChar(): string;
+		/** Check if the string is valid url */
 		validURL(): boolean;
+		/** Extract raw Url and remove all queryParam @example "https://google.com?image=1&type=2" -> "https://google.com" */
 		getRawUrl(): string | false;
+		/** Extract query param from an Url @example "https://google.com?image=1&type=2" -> { image: 1, type: 2 } */
 		getQueryParams<T extends string>(): null | Record<T, string>;
-		toQueryParams<T extends string>(): null | Record<T, string>;
 	}
 
 	interface Math {
+		/** Randomize integer */
 		randomInt(min: number, max: number): number;
 		/** Addition n + n */
 		add(
@@ -212,18 +312,47 @@ declare global {
 		div: Math["add"];
 	}
 
+	/**
+	 * Method to covert an object of string to queryParam string
+	 * @param obj
+	 * @returns string
+	 * 
+	 * @example
+	 * toQueryParam({ param1: 123, param2: 123 }) -> "param1=123&param2=123"
+	 */
 	function toQueryParams(obj: Record<string, string>): string;
+	/**
+	 * Method to execute code after timeout after finished typing.
+	 * For every user type, it will abort previous action.
+	 * 
+	 * @param callback any Function to execute after timeout
+	 * @param timeout number
+	 */
 	function typingDebounce(callback: NoopVoid, timeout?: number): void;
+	/**
+	 * A simple utility for conditionally joining classNames together.
+	 * @param args ClassValue
+	 * @returns string
+	 */
 	function classNames(...inputs: ClassValue[]): string;
+	/**
+	 * Generate uuid v4 string
+	 */
 	function uuid(): string;
+	/**
+	 * An No Operation function
+	 * @returns null
+	 */
 	function noop(): null;
+	/**
+	 * An No Operation function
+	 * @returns undefined
+	 */
 	function noopVoid(): void;
-	function prettyJSON(object: object): string;
+	/** An typed Object.entries method */
 	function entries<T extends object>(obj?: T): Entries<T>;
+	/** JSON.stringify with formatted tabs */
+	function prettyJSON(object: object): string;
+	/** JSON.stringify with formatted tabs and console it */
 	function prettyConsole(...args: any[]): void;
-	function reorderArrayIndex<T>(
-		array: T[],
-		fromIndex: number,
-		toIndex: number
-	): T[];
 }
