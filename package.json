@@ -1,8 +1,12 @@
 {
     "name": "global-methods",
-    "version": "2.7.4",
+    "version": "2.7.5",
     "keywords": [
         "global-methods",
+        "pure-js",
+        "javascript-primitive",
+        "primitive",
+        "modules",
         "globalThis",
         "javascript",
         "typescript"
@@ -18,11 +22,10 @@
         }
     ],
     "main": "index.js",
-    "type": "module",
     "types": "index.d.ts",
     "repository": {
         "type": "git",
-        "url": "https://github.com/aprakoso98/Typed.git",
+        "url": "https://github.com/bambang-ap/global-methods.git",
         "directory": "global-methods"
     },
     "scripts": {
