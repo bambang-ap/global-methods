@@ -47,17 +47,6 @@ globalThis.classNames = function () {
     }
     return str;
 };
-globalThis.reorderArrayIndex = function (arr, fromIndex, toIndex) {
-    const array = arr.slice();
-    if (fromIndex < 0 || fromIndex >= array.length)
-        return array;
-    if (toIndex < 0 || toIndex >= array.length)
-        return array;
-    const element = array[fromIndex];
-    array.splice(fromIndex, 1);
-    array.splice(toIndex, 0, element);
-    return array;
-};
 globalThis.prettyConsole = (...objects) => {
     return objects.forEach((message) => typeof message === "object"
         ? console.log(prettyJSON(message))
@@ -176,6 +165,18 @@ Array.prototype.toRnStyle = function () {
         return styles;
     }, []);
     return styles;
+};
+Array.prototype.reorderIndex = function (
+  fromIndex,
+  toIndex
+) {
+  const array = this.slice();
+  if (fromIndex < 0 || fromIndex >= array.length) return array;
+  if (toIndex < 0 || toIndex >= array.length) return array;
+  const element = array[fromIndex];
+  array.splice(fromIndex, 1);
+  array.splice(toIndex, 0, element);
+  return array;
 };
 String.prototype.humanize = Number.prototype.humanize = function (opts) {
     const num = parseFloat(this.toString());
