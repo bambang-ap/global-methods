@@ -1,9 +1,7 @@
 /// <reference path="../index.d.ts" />
 
 function toVal(mix: any) {
-  var k,
-    y,
-    str = "";
+  let k, y, str = "";
 
   if (typeof mix === "string" || typeof mix === "number") {
     str += mix;
@@ -41,10 +39,8 @@ globalThis.toQueryParams = function (obj) {
 };
 
 globalThis.classNames = function () {
-  var i = 0,
-    tmp,
-    x,
-    str = "";
+  let i = 0, tmp, x, str = "";
+
   while (i < arguments.length) {
     if ((tmp = arguments[i++])) {
       if ((x = toVal(tmp))) {
@@ -56,20 +52,6 @@ globalThis.classNames = function () {
   return str;
 };
 
-globalThis.reorderArrayIndex = function (
-  arr: any[],
-  fromIndex: number,
-  toIndex: number
-) {
-  const array = arr.slice();
-  if (fromIndex < 0 || fromIndex >= array.length) return array;
-  if (toIndex < 0 || toIndex >= array.length) return array;
-  const element = array[fromIndex];
-  array.splice(fromIndex, 1);
-  array.splice(toIndex, 0, element);
-  return array;
-};
-
 globalThis.prettyConsole = (...objects) => {
   return objects.forEach((message) =>
     typeof message === "object"
@@ -78,7 +60,7 @@ globalThis.prettyConsole = (...objects) => {
   );
 };
 
-let typingTimer: NodeJS.Timeout;
+let typingTimer: ReturnType<typeof setTimeout>
 globalThis.typingDebounce = function (callback: () => void, timeout = 500) {
   clearTimeout(typingTimer);
   typingTimer = setTimeout(callback, timeout);
@@ -106,7 +88,7 @@ globalThis.noop = function () {
   return null;
 };
 
-globalThis.noopVoid = function () {};
+globalThis.noopVoid = function () { };
 
 type TComment = {
   id: number;
@@ -222,6 +204,19 @@ Array.prototype.toRnStyle = function () {
   return styles;
 };
 
+Array.prototype.reorderIndex = function (
+  fromIndex: number,
+  toIndex: number
+) {
+  const array = this.slice();
+  if (fromIndex < 0 || fromIndex >= array.length) return array;
+  if (toIndex < 0 || toIndex >= array.length) return array;
+  const element = array[fromIndex];
+  array.splice(fromIndex, 1);
+  array.splice(toIndex, 0, element);
+  return array;
+};
+
 String.prototype.humanize = Number.prototype.humanize = function (opts) {
   const num = parseFloat(this.toString());
   let bytes = Number.isNaN(num) ? 0 : num,
@@ -260,13 +255,13 @@ String.prototype.humanize = Number.prototype.humanize = function (opts) {
   );
 };
 
-Number.prototype.getPercentage = function calculate(total = 0, dp = 2) {
+Number.prototype.getPercentage = function calculate(total = 0, dp = 0) {
   const current = this as number;
-  return parseInt(((total / current) * 100).toFixed(3));
+  return parseInt(((total / current) * 100).toFixed(dp));
 };
 
 Number.prototype.ratio = function (ratio) {
-  ratio = ratio.replace(/\:/g, "/");
+  ratio = ratio.replace(/\:/g, "/") as `${number}:${number}`;
   const height = eval(this.toString());
   const width = height * eval(ratio);
   return { height, width };
@@ -422,17 +417,17 @@ String.prototype.validURL = function () {
   const str = this as string;
   const pattern = new RegExp(
     "^(https?:\\/\\/)?" + // protocol
-      "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
-      "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-      "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
-      "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
-      "(\\#[-a-z\\d_]*)?$",
+    "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
+    "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+    "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
+    "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
+    "(\\#[-a-z\\d_]*)?$",
     "i"
   ); // fragment locator
   return !!pattern.test(str);
 };
 
-String.prototype.getQueryParams = String.prototype.toQueryParams = function <
+String.prototype.getQueryParams = function <
   T extends string
 >() {
   const url = this as string;
