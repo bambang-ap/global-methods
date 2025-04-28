@@ -129,10 +129,23 @@ declare global {
 
 	interface Array<T> {
 		/**
+		 * Check current position by passing an index compare with array.length
+		 * @param index number
+		 * 
+		 * @example
+		 * console.log([1,2,3,4,5].position(0))
+		 * // { isLast: false, isFirst: true }
+		 * console.log([1,2,3,4,5].position(2))
+		 * // { isLast: false, isFirst: false }
+		 * console.log([1,2,3,4,5].position(4))
+		 * // { isLast: true, isFirst: false }
+		 */
+		position(index: number): Omit<MMapValue<T>, "item">;
+		/**
 		 * Sort an array in place based on order parameter
 		 * @param order (number | string)[]
 		 * @param callback (value: T) => V
-		 * 
+		 *
 		 * @example
 		 * console.log([{ prop: 1 }, { prop: 2 }, { prop: 3 }].sort([2, 3, 1], v => v.prop))
 		 * // [{ prop: 2 }, { prop: 3 }, { prop: 1 }]
@@ -160,7 +173,7 @@ declare global {
 		 * Generate multidimensional array for generating rows
 		 * @param numColumns number
 		 * @param sameCount boolean
-		 * 
+		 *
 		 * @example
 		 * [1,2,3,4,5].generateRows(3) -> [[1, 2, 3], [4, 5]]
 		 * [1,2,3,4,5].generateRows(3, true) -> [[1, 2, 3], [4, 5, null]]
@@ -171,15 +184,15 @@ declare global {
 		): { data: T[][]; rows: number };
 		/**
 		 * Regular mapping array with more callback value
-		 * @param callback 
+		 * @param callback
 		 */
 		mmap<U>(callback: MMapCallback<T, U>): U[];
 		/**
 		 * Change the array structure, this method is suitable for generating submenus
-		 * @param nestProperty 
-		 * @param nestId 
-		 * @param nestForeignId 
-		 * 
+		 * @param nestProperty
+		 * @param nestId
+		 * @param nestForeignId
+		 *
 		 * @example
 		 * [{ id: "123", parent_id: null, }, { parent_id: "123", id: "111", }].nest('subMenu', 'id', 'parent_id')
 		 * // [{"id":"123","parent_id":null,"subMenu":[{"parent_id":"123","id":"111"}]}]
@@ -188,18 +201,14 @@ declare global {
 			nestProperty: NP,
 			nestId: K,
 			nestForeignId: FK
-		): Record<NP, T[]> & T extends infer U ? U[] : never
+		): Record<NP, T[]> & T extends infer U ? U[] : never;
 		/**
-		 * 
+		 *
 		 * @param fromIndex number
 		 * @param toIndex number
 		 */
-		reorderIndex(
-			fromIndex: number,
-			toIndex: number
-		): T[];
+		reorderIndex(fromIndex: number, toIndex: number): T[];
 	}
-
 
 	interface Number {
 		/** Convert number to readable value */
@@ -229,9 +238,12 @@ declare global {
 		getPercentage(total?: number, decimalPoint?: number): number;
 		/**
 		 * An number utility to get width & height using aspectRatio
-		 * @param aspectRatio 
+		 * @param aspectRatio
 		 */
-		ratio(aspectRatio: `${number}:${number}`): { width: number; height: number };
+		ratio(aspectRatio: `${number}:${number}`): {
+			width: number;
+			height: number;
+		};
 		/** Convert number to roman number
 		 * @example 1 -> I, 2 -> II
 		 */
@@ -316,7 +328,7 @@ declare global {
 	 * Method to covert an object of string to queryParam string
 	 * @param obj
 	 * @returns string
-	 * 
+	 *
 	 * @example
 	 * toQueryParam({ param1: 123, param2: 123 }) -> "param1=123&param2=123"
 	 */
@@ -324,7 +336,7 @@ declare global {
 	/**
 	 * Method to execute code after timeout after finished typing.
 	 * For every user type, it will abort previous action.
-	 * 
+	 *
 	 * @param callback any Function to execute after timeout
 	 * @param timeout number
 	 */

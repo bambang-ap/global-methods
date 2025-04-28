@@ -1,7 +1,7 @@
 "use strict";
 /// <reference path="../index.d.ts" />
 function toVal(mix) {
-    var k, y, str = "";
+    let k, y, str = "";
     if (typeof mix === "string" || typeof mix === "number") {
         str += mix;
     }
@@ -36,7 +36,7 @@ globalThis.toQueryParams = function (obj) {
     return params.join("&");
 };
 globalThis.classNames = function () {
-    var i = 0, tmp, x, str = "";
+    let i = 0, tmp, x, str = "";
     while (i < arguments.length) {
         if ((tmp = arguments[i++])) {
             if ((x = toVal(tmp))) {
@@ -75,6 +75,12 @@ globalThis.noop = function () {
     return null;
 };
 globalThis.noopVoid = function () { };
+Array.prototype.position = function (index) {
+    const { length } = this;
+    const isLast = length - 1 === index;
+    const isFirst = index === 0;
+    return { isFirst, isLast };
+};
 Array.prototype.sortOrder = function (order, callback) {
     const arr = this;
     const [leftSide, rightSide] = [[], []];
@@ -150,7 +156,7 @@ Array.prototype.generateRows = function (numColumns, sameCount = false) {
 Array.prototype.mmap = function (callback) {
     const arr = this;
     return arr.map((item, index) => {
-        return callback({ item, isFirst: index === 0, isLast: index + 1 === arr.length }, index);
+        return callback(Object.assign({ item }, arr.position(index)), index);
     });
 };
 Array.prototype.toRnStyle = function () {
@@ -166,17 +172,16 @@ Array.prototype.toRnStyle = function () {
     }, []);
     return styles;
 };
-Array.prototype.reorderIndex = function (
-  fromIndex,
-  toIndex
-) {
-  const array = this.slice();
-  if (fromIndex < 0 || fromIndex >= array.length) return array;
-  if (toIndex < 0 || toIndex >= array.length) return array;
-  const element = array[fromIndex];
-  array.splice(fromIndex, 1);
-  array.splice(toIndex, 0, element);
-  return array;
+Array.prototype.reorderIndex = function (fromIndex, toIndex) {
+    const array = this.slice();
+    if (fromIndex < 0 || fromIndex >= array.length)
+        return array;
+    if (toIndex < 0 || toIndex >= array.length)
+        return array;
+    const element = array[fromIndex];
+    array.splice(fromIndex, 1);
+    array.splice(toIndex, 0, element);
+    return array;
 };
 String.prototype.humanize = Number.prototype.humanize = function (opts) {
     const num = parseFloat(this.toString());
@@ -197,9 +202,9 @@ String.prototype.humanize = Number.prototype.humanize = function (opts) {
         indexUnit < units.length - 1);
     return classNames(bytes.toFixed(dp), [units[indexUnit], op].filter(Boolean).join(""));
 };
-Number.prototype.getPercentage = function calculate(total = 0, dp = 2) {
+Number.prototype.getPercentage = function calculate(total = 0, dp = 0) {
     const current = this;
-    return parseInt(((total / current) * 100).toFixed(3));
+    return parseInt(((total / current) * 100).toFixed(dp));
 };
 Number.prototype.ratio = function (ratio) {
     ratio = ratio.replace(/\:/g, "/");
@@ -342,7 +347,7 @@ String.prototype.validURL = function () {
         "(\\#[-a-z\\d_]*)?$", "i"); // fragment locator
     return !!pattern.test(str);
 };
-String.prototype.getQueryParams = String.prototype.toQueryParams = function () {
+String.prototype.getQueryParams = function () {
     const url = this;
     if (!url.validURL())
         return null;
