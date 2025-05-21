@@ -11,10 +11,10 @@ type ClassValue =
 type ClassDictionary = Record<string, any>;
 type ClassArray = ClassValue[];
 
-declare module "react" {
+declare module 'react' {
 	function forwardRef<T, P = {}>(
-		render: (props: P, ref: React.Ref<T>) => React.ReactElement | null
-	): (props: P & React.RefAttributes<T>) => React.ReactElement | null;
+		render: (props: P, ref: React.Ref<T>) => React.ReactElement,
+	): (props: P & React.RefAttributes<T>) => React.ReactElement;
 }
 
 declare global {
@@ -29,37 +29,37 @@ declare global {
 	type _TupleOf<
 		T,
 		N extends number,
-		R extends unknown[]
-	> = R["length"] extends N ? R : _TupleOf<T, N, [T, ...R]>;
-	type OptionalUnion<A, B> = A | (B & { key?: any });
+		R extends unknown[],
+	> = R['length'] extends N ? R : _TupleOf<T, N, [T, ...R]>;
+	type OptionalUnion<A, B> = A | (B & {key?: any});
 	type TypeProp<A extends {}, B = string> =
 		| keyof A
-		| (B extends string ? "" : B & { property?: B });
+		| (B extends string ? '' : B & {property?: B});
 	type GetProps<
 		C extends (...args: any) => unknown,
-		Exclude extends string | false = false
+		Exclude extends string | false = false,
 	> = Exclude extends string
 		? Omit<Parameters<C>[0], Exclude>
 		: Parameters<C>[0];
 	type MyObject<T = string> = Record<string, T>;
 	type Dict<V = string, K extends string = string> = Record<K, V>;
-	type Create<K extends string, A, B = string> = { [Q in K as `${Q}s`]?: A } & {
+	type Create<K extends string, A, B = string> = {[Q in K as `${Q}s`]?: A} & {
 		[Q in K]?: TypeProp<A, B>;
 	};
 	type NestedKeyOf<
 		ObjectType extends object,
-		Delimiter extends string = "-"
+		Delimiter extends string = '-',
 	> = {
 		[Key in keyof ObjectType &
 			(string | number)]: ObjectType[Key] extends object
 			? never | `${Key}${Delimiter}${NestedKeyOf<ObjectType[Key], Delimiter>}`
 			: `${Key}`;
 	}[keyof ObjectType & (string | number)];
-	type LiteralUnion<T extends U, U = string> = T | (U & { property?: never });
-	type ToString<R extends string, L extends string = ""> = `${L}${R}`;
+	type LiteralUnion<T extends U, U = string> = T | (U & {property?: never});
+	type ToString<R extends string, L extends string = ''> = `${L}${R}`;
 	type CamelCase<
 		Separator extends string,
-		S extends string
+		S extends string,
 	> = S extends `${infer P1}${Separator}${infer P2}${infer P3}`
 		? `${Lowercase<P1>}${Uppercase<P2>}${CamelCase<Separator, P3>}`
 		: Lowercase<S>;
@@ -70,9 +70,9 @@ declare global {
 	};
 	type ObjFromTuple<
 		T extends string,
-		S extends string = "",
+		S extends string = '',
 		Type = boolean,
-		Separator extends string = "-"
+		Separator extends string = '-',
 	> = KeysToCamelCase<Separator, Record<ToString<T, S>, Type>>;
 	type ThenArg<T> = T extends PromiseLike<infer U> ? U : T;
 	type TheValue<C, S, F> = {
@@ -86,7 +86,7 @@ declare global {
 		? I
 		: never;
 
-	type MMapValue<T> = { item: T; isFirst: boolean; isLast: boolean };
+	type MMapValue<T> = {item: T; isFirst: boolean; isLast: boolean};
 	type MMapCallback<T, U> = (value: MMapValue<T>, index: number) => U;
 
 	type ObjKeyof<T extends {}> = Extract<keyof T, string>;
@@ -104,7 +104,7 @@ declare global {
 	type ObjectNonArray<T> = T extends Array<infer V>
 		? ObjectNonArray<V>
 		: T extends object
-		? { [K in keyof T]: ObjectNonArray<T[K]> }
+		? {[K in keyof T]: ObjectNonArray<T[K]>}
 		: T;
 
 	type Entries<T> = {
@@ -131,7 +131,7 @@ declare global {
 		/**
 		 * Check current position by passing an index compare with array.length
 		 * @param index number
-		 * 
+		 *
 		 * @example
 		 * console.log([1,2,3,4,5].position(0))
 		 * // { isLast: false, isFirst: true }
@@ -140,7 +140,7 @@ declare global {
 		 * console.log([1,2,3,4,5].position(4))
 		 * // { isLast: true, isFirst: false }
 		 */
-		position(index: number): Omit<MMapValue<T>, "item">;
+		position(index: number): Omit<MMapValue<T>, 'item'>;
 		/**
 		 * Sort an array in place based on order parameter
 		 * @param order (number | string)[]
@@ -152,7 +152,7 @@ declare global {
 		 */
 		sortOrder<V extends number | string, J extends (value: T) => V>(
 			order: V[],
-			callback: J
+			callback: J,
 		): T[];
 		/**
 		 * Replace array of index n with data
@@ -180,8 +180,8 @@ declare global {
 		 */
 		generateRows(
 			numColumns: number,
-			sameCount?: boolean
-		): { data: T[][]; rows: number };
+			sameCount?: boolean,
+		): {data: T[][]; rows: number};
 		/**
 		 * Regular mapping array with more callback value
 		 * @param callback
@@ -200,7 +200,7 @@ declare global {
 		nest<NP extends string, K extends keyof T, FK extends Exclude<keyof T, K>>(
 			nestProperty: NP,
 			nestId: K,
-			nestForeignId: FK
+			nestForeignId: FK,
 		): Record<NP, T[]> & T extends infer U ? U[] : never;
 		/**
 		 *
@@ -257,7 +257,7 @@ declare global {
 
 	interface String {
 		/** Convert number to readable value */
-		humanize: Number["humanize"];
+		humanize: Number['humanize'];
 		/**
 		 * Extract number from string
 		 * @example "1a2b3c" -> 123
@@ -317,11 +317,11 @@ declare global {
 			...values: (number | string | undefined | null)[]
 		): number;
 		/** Subtraction n - n */
-		subtract: Math["add"];
+		subtract: Math['add'];
 		/** Multiplication n x n */
-		multiply: Math["add"];
+		multiply: Math['add'];
 		/** Division n ÷ n */
-		div: Math["add"];
+		div: Math['add'];
 	}
 
 	/**
