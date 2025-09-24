@@ -27,6 +27,9 @@ function toVal(mix) {
     }
     return str;
 }
+globalThis.sleep = function (ms = 500) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+};
 globalThis.toQueryParams = function (obj) {
     const params = Object.entries(obj).reduce((ret, [key, value]) => {
         if (value !== undefined)
@@ -295,6 +298,12 @@ String.prototype.kebabToCamel = function () {
 String.prototype.snakeToCamel = function () {
     const camelCase = caseReplacer(this, "_");
     return camelCase;
+};
+String.prototype.snakeToPascal = function () {
+    const pascalCase = this.split("_")
+        .map((txt) => txt.ucfirst())
+        .join("");
+    return pascalCase;
 };
 String.prototype.camelToSnake = function () {
     const snakeCase = caseReplacerFromCamel(this, "_");

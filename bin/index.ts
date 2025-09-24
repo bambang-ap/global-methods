@@ -30,6 +30,10 @@ function toVal(mix: any) {
 	return str;
 }
 
+globalThis.sleep = function (ms = 500) {
+	return new Promise((resolve) => setTimeout(resolve, ms));
+};
+
 globalThis.toQueryParams = function (obj) {
 	const params = Object.entries(obj).reduce<string[]>((ret, [key, value]) => {
 		if (value !== undefined) ret.push(`${key}=${value}`);
@@ -196,10 +200,7 @@ Array.prototype.generateRows = function (numColumns, sameCount = false) {
 Array.prototype.mmap = function (callback) {
 	const arr = this as unknown[];
 	return arr.map((item, index) => {
-		return callback(
-			{ item, ...arr.position(index) },
-			index
-		);
+		return callback({ item, ...arr.position(index) }, index);
 	});
 };
 
@@ -371,6 +372,13 @@ String.prototype.kebabToCamel = function () {
 String.prototype.snakeToCamel = function () {
 	const camelCase = caseReplacer(this as string, "_");
 	return camelCase;
+};
+
+String.prototype.snakeToPascal = function () {
+	const pascalCase = this.split("_")
+		.map((txt) => txt.ucfirst())
+		.join("");
+	return pascalCase;
 };
 
 String.prototype.camelToSnake = function () {
