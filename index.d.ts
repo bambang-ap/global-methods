@@ -373,5 +373,5 @@ declare global {
 	/** JSON.stringify with formatted tabs and console it */
 	function prettyConsole(...args: any[]): void;
 	/** sleep function to wait execution */
-	function sleep(ms?: number): void;
+	function sleep(ms?: number): Promise<void>;
 }
