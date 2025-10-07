@@ -100,19 +100,18 @@ globalThis.uuid = () => {
 };
 
 globalThis.propertyMapping = function <
-	T extends Record<string, any>,
-	K extends keyof T
->(array: T[], keys: readonly K[]) {
-	const properties = {} as Record<
-		K,
-		(T[K] extends WithId["id"] ? T[K] : WithId["id"])[]
-	>;
+		T extends Record<string, any>,
+		K extends readonly (keyof T)[]
+	>(array: T[], keys: K) {
+	const properties = {} as {
+		[P in K[number]]: T[P][];
+	};
 
 	for (const arrKey of array) {
 		for (const key of keys) {
 			if (!properties[key]) properties[key] = [] as any;
-			const value = arrKey[key] as WithId["id"];
-			if (value != null) properties[key].push(value as T[K]);
+			const value = arrKey[key];
+			if (value != null) (properties[key] as T[typeof key][]).push(value);
 		}
 	}
 

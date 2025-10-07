@@ -360,10 +360,19 @@ declare global {
 	/**
 	 *
 	 */
-	function propertyMapping<T extends Record<string, any>, K extends keyof T>(
-		array: T[],
-		keys: readonly K[]
-	): Record<K, (T[K] extends WithId['id'] ? T[K] : WithId['id'])[]> & { array: T[] };
+	function propertyMapping<
+		T extends Record<string, any>,
+		K extends readonly (keyof T)[]
+	>(array: T[], keys: K): PropertyMappingResult<T, K>;
+
+	type PropertyMappingResult<
+		T extends Record<string, any>,
+		K extends readonly (keyof T)[]
+	> = {
+		[P in K[number]]: T[P][];
+	} & {
+		array: T[];
+	};
 	/**
 	 * An No Operation function
 	 * @returns null
