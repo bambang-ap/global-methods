@@ -18,6 +18,7 @@ declare module "react" {
 }
 
 declare global {
+	type WithId = { id: string | number };
 	type Noop = typeof noop;
 	type NoopVoid = typeof noopVoid;
 	type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
@@ -357,10 +358,22 @@ declare global {
 	 */
 	function uuid(): string;
 	/**
+	 *
+	 */
+	function propertyMapping<T extends Record<string, any>, K extends keyof T>(
+		array: T[],
+		keys: readonly K[]
+	): Record<K, (T[K] extends WithId['id'] ? T[K] : WithId['id'])[]> & { array: T[] };
+	/**
 	 * An No Operation function
 	 * @returns null
 	 */
 	function noop(): null;
+	/**
+	 * @see {@link noop}
+	 * @returns null
+	 */
+	function CNoop(): null;
 	/**
 	 * An No Operation function
 	 * @returns undefined
@@ -374,4 +387,6 @@ declare global {
 	function prettyConsole(...args: any[]): void;
 	/** sleep function to wait execution */
 	function sleep(ms?: number): Promise<void>;
+	/** randomize generate id */
+	function generateId(id?: string): string;
 }

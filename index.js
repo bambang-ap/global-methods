@@ -27,6 +27,15 @@ function toVal(mix) {
     }
     return str;
 }
+globalThis.generateId = function (id) {
+    const now = new Date();
+    const timestamp = now.valueOf();
+    const rand1 = Math.randomInt(111, 999);
+    const rand2 = Math.randomInt(111, 999);
+    const rand3 = Math.randomInt(111, 999);
+    const randomId = (timestamp * rand1 * rand2) / rand3;
+    return classNames(id, randomId.toString(36)).replace(/(\s|\-|\.)/g, "");
+};
 globalThis.sleep = function (ms = 500) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 };
@@ -69,10 +78,26 @@ globalThis.uuid = () => {
         return v.toString(16);
     });
 };
+globalThis.propertyMapping = function (array, keys) {
+    const properties = {};
+    for (const arrKey of array) {
+        for (const key of keys) {
+            if (!properties[key])
+                properties[key] = [];
+            const value = arrKey[key];
+            if (value != null)
+                properties[key].push(value);
+        }
+    }
+    return Object.assign(Object.assign({}, properties), { array });
+};
 globalThis.entries = function (obj) {
     if (!obj)
         return [];
     return Object.entries(obj);
+};
+globalThis.CNoop = function () {
+    return null;
 };
 globalThis.noop = function () {
     return null;
