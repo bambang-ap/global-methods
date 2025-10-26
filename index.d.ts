@@ -128,6 +128,12 @@ declare global {
 	type AtLeast<T, K extends keyof T> = Partial<T> & Pick<T, K>;
 	type PartialOne<T, K extends keyof T> = AtLeast<T, Exclude<keyof T, K>>;
 
+	type ExcludeStartsWith<T, Prefix extends string> = T extends string
+		? T extends `${Prefix}${string}`
+			? never
+			: T
+		: never;
+
 	interface Array<T> {
 		/**
 		 * Check current position by passing an index compare with array.length
@@ -369,7 +375,7 @@ declare global {
 		T extends Record<string, any>,
 		K extends readonly (keyof T)[]
 	> = {
-		[P in K[number]]: T[P][];
+		[P in K[number]]: NonNullable<T[P]>[];
 	} & {
 		array: T[];
 	};
