@@ -100,9 +100,9 @@ globalThis.uuid = () => {
 };
 
 globalThis.propertyMapping = function <
-		T extends Record<string, any>,
-		K extends readonly (keyof T)[]
-	>(array: T[], keys: K) {
+	T extends Record<string, any>,
+	K extends readonly (keyof T)[]
+>(array: T[], keys: K) {
 	const properties = {} as {
 		[P in K[number]]: T[P][];
 	};
@@ -186,8 +186,14 @@ Array.prototype.nest = function (nestProperty, nestId, nestForeignId) {
 	}, []);
 };
 
-Array.prototype.replace = function (index, dataOrCallback) {
+Array.prototype.replace = function (indexOrFinder, dataOrCallback) {
+	let index: number;
 	const state = this;
+
+	if (typeof indexOrFinder === "function") {
+		index = state.findIndex(indexOrFinder);
+	} else index = indexOrFinder;
+
 	const dataL = state.slice(0, index);
 	const dataR = state.slice(index + 1);
 	if (index >= 0 && index < state?.length) {
@@ -199,8 +205,14 @@ Array.prototype.replace = function (index, dataOrCallback) {
 	return state;
 };
 
-Array.prototype.remove = function (index) {
+Array.prototype.remove = function (indexOrFinder) {
+	let index: number;
 	const state = this;
+
+	if (typeof indexOrFinder === "function") {
+		index = state.findIndex(indexOrFinder);
+	} else index = indexOrFinder;
+
 	const dataL = state.slice(0, index);
 	const dataR = state.slice(index + 1);
 	if (index > 0) return [...dataL, ...dataR];

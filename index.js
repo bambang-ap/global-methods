@@ -138,8 +138,14 @@ Array.prototype.nest = function (nestProperty, nestId, nestForeignId) {
         return nested;
     }, []);
 };
-Array.prototype.replace = function (index, dataOrCallback) {
+Array.prototype.replace = function (indexOrFinder, dataOrCallback) {
+    let index;
     const state = this;
+    if (typeof indexOrFinder === "function") {
+        index = state.findIndex(indexOrFinder);
+    }
+    else
+        index = indexOrFinder;
     const dataL = state.slice(0, index);
     const dataR = state.slice(index + 1);
     if (index >= 0 && index < (state === null || state === void 0 ? void 0 : state.length)) {
@@ -151,8 +157,14 @@ Array.prototype.replace = function (index, dataOrCallback) {
     }
     return state;
 };
-Array.prototype.remove = function (index) {
+Array.prototype.remove = function (indexOrFinder) {
+    let index;
     const state = this;
+    if (typeof indexOrFinder === "function") {
+        index = state.findIndex(indexOrFinder);
+    }
+    else
+        index = indexOrFinder;
     const dataL = state.slice(0, index);
     const dataR = state.slice(index + 1);
     if (index > 0)

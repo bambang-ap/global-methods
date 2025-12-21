@@ -161,6 +161,10 @@ declare global {
 			order: V[],
 			callback: J
 		): T[];
+		/** Remove array of index n */
+		remove(index: number): T[];
+		/** Remove array of index n using finder index */
+		remove(finder: GetProps<Array<T>["findIndex"]>): T[];
 		/**
 		 * Replace array of index n with data
 		 * @param index number
@@ -173,9 +177,22 @@ declare global {
 		 * @param callback (data: T) => T
 		 */
 		replace(index: number, callback: (data: T) => T): T[];
+		/**
+		 * Replace array of index n with finder and data
+		 * @param index number
+		 * @param callback (data: T) => T
+		 */
+		replace(finder: GetProps<Array<T>["findIndex"]>, data: T): T[];
+		/**
+		 * Replace array of index n with finder and callback data
+		 * @param index number
+		 * @param callback (data: T) => T
+		 */
+		replace(
+			finder: GetProps<Array<T>["findIndex"]>,
+			callback: (data: T) => T
+		): T[];
 		toRnStyle: () => T[];
-		/** Remove array of index n */
-		remove: (index: number) => T[];
 		/**
 		 * Generate multidimensional array for generating rows
 		 * @param numColumns number
