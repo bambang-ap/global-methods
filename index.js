@@ -167,7 +167,7 @@ Array.prototype.remove = function (indexOrFinder) {
         index = indexOrFinder;
     const dataL = state.slice(0, index);
     const dataR = state.slice(index + 1);
-    if (index > 0)
+    if (index >= 0)
         return [...dataL, ...dataR];
     else
         return dataR;
